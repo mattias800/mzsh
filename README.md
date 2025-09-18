@@ -70,10 +70,38 @@ This installs via Homebrew:
 - fzf
 - zsh-interactive-cd
 - bat
+- eza
+- yazi
 
 Oh My Zsh plugins enabled by default in this config:
 - docker, docker-compose, fzf, dotnet, dotenv, eza, gh, git, jump, autojump
 Note: These plugins expect the corresponding tools to be installed (except dotenv). Install whichever you use; others will simply be inactive if the tool is missing.
+
+## Guide
+
+Tools
+- eza: Modern ls replacement with colors, icons, and git info. With the OMZ eza plugin enabled, common ls commands are aliased to eza. Examples:
+  - eza -la         # long, all
+  - eza -T          # tree view
+  - eza -la --git   # include git status columns
+- bat: cat replacement with syntax highlighting. In this config, cat is aliased to bat --paging=never --style=plain if bat is installed. To bypass, run command cat or /bin/cat.
+- yazi: A fast terminal file manager. Launch with yazi from any directory; q to quit.
+- fzf: Fuzzy finder used by helpers like gswi (see below). Install key bindings/completions separately if desired.
+
+Git helper
+- gswi: Fuzzy switch to a local or remote branch with preview.
+  - Fetches/prunes, lists branches by recent activity, shows recent commits in a preview, then switches.
+  - Requires fzf. Run ~/.mzsh/bin/mzsh-install-deps to install it.
+
+Enabled OMZ plugins (high-level)
+- docker, docker-compose: Aliases and completions for Docker and Compose.
+- fzf: Convenience functions around fzf.
+- dotnet: Aliases/completions for the dotnet CLI.
+- dotenv: Helpers for working with .env files. Be mindful when auto-loading environment from arbitrary repos.
+- eza: Aliases ls to eza variants.
+- gh: Aliases/completions for GitHub CLI.
+- git: A rich set of git aliases (e.g., gst, gco, gl, gb, gaa, gcam).
+- jump, autojump: Integration with jump/autojump if installed (directory jumping). If neither tool is installed, these plugins remain inactive.
 
 
 ## Notes

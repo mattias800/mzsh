@@ -4,7 +4,9 @@ Modular Zsh configuration for macOS. Clone, source `init.zsh` from your local `~
 
 ## Quick start
 
+```bash
 curl -fsSL https://raw.githubusercontent.com/mattias800/mzsh/main/bin/install.sh | bash
+```
 
 Note: The config is relocatable. `init.zsh` sources all modules relative to its own path, so you can clone it anywhere; just adjust the source line accordingly. PATH for tools is expected to be handled by each tool’s installer.
 

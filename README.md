@@ -68,10 +68,12 @@ This installs via Homebrew:
 - zsh-autosuggestions
 - zsh-syntax-highlighting
 - fzf
-- zsh-interactive-cd
 - bat
 - eza
 - yazi
+
+Installed as an Oh My Zsh custom plugin (cloned into $ZSH_CUSTOM/plugins):
+- zsh-interactive-cd
 
 Oh My Zsh plugins enabled by default in this config:
 - docker, docker-compose, fzf, dotnet, dotenv, eza, gh, git, jump, autojump

@@ -15,7 +15,6 @@ pkgs=(
   zsh-autosuggestions
   zsh-syntax-highlighting
   fzf
-  zsh-interactive-cd
   bat
   eza
   yazi
@@ -58,5 +57,16 @@ for cask in "${casks[@]}"; do
     brew install --cask "$cask"
   fi
 done
+
+# Install zsh-interactive-cd as an Oh My Zsh custom plugin
+ZSH_CUSTOM_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+PLUGIN_DIR="$ZSH_CUSTOM_DIR/plugins/zsh-interactive-cd"
+if [ -d "$PLUGIN_DIR/.git" ]; then
+  echo "[mzsh] zsh-interactive-cd already installed at $PLUGIN_DIR"
+else
+  echo "[mzsh] Installing zsh-interactive-cd plugin into $PLUGIN_DIR"
+  mkdir -p "$ZSH_CUSTOM_DIR/plugins"
+  git clone --depth=1 https://github.com/changyuheng/zsh-interactive-cd "$PLUGIN_DIR"
+fi
 
 echo "[mzsh] Done. If needed, restart your terminal."

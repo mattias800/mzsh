@@ -207,6 +207,7 @@ This installs via Homebrew:
 - htop
 - pstree
 - jq
+- gping
 
 Notes:
 - z: initialized automatically if Homebrew’s /opt/homebrew/etc/profile.d/z.sh is present.

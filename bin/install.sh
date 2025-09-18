@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# mzsh bootstrap installer
-# - Clones or downloads the repo to ~/.mzsh (or $MZSH_DIR if set)
-# - Runs dependency installer
+# mzsh bootstrap installer (macOS)
+# - Clones or updates the repo to ~/.mzsh (or $MZSH_DIR if set)
+# - Ensures Homebrew is installed and on PATH
+# - Installs all dependencies (e.g., eza, bat, fzf, etc.)
+# - Installs Oh My Zsh non-interactively if missing
 # - Appends source line to ~/.zshrc if missing
 
 REPO_URL="https://github.com/mattias800/mzsh"
@@ -16,12 +18,11 @@ err() { printf "[mzsh] ERROR: %s\n" "$*" >&2; }
 # Ensure destination dir exists
 mkdir -p "$REPO_DIR"
 
-# Prefer git if available; fallback to tarball
+# Fetch or update repo
 if command -v git >/dev/null 2>&1; then
   if [ -d "$REPO_DIR/.git" ]; then
-    log "Repo exists; updating (fast-forward)"
+    log "Repo exists; updating (fast-forward if possible)"
     git -C "$REPO_DIR" fetch --prune --quiet || true
-    # Try fast-forward on main; ignore if diverged
     if git -C "$REPO_DIR" rev-parse --verify --quiet main >/dev/null; then
       git -C "$REPO_DIR" pull --ff-only --quiet || log "Non-FF; leaving as-is"
     fi
@@ -45,17 +46,62 @@ else
     err "Failed to locate extracted directory"
     exit 1
   fi
-  # Sync contents (rsync may not be present by default; use tar piping)
   (cd "$SRC_DIR" && tar -cf - .) | (cd "$REPO_DIR" && tar -xf -)
   rm -rf "$TMPDIR"
 fi
 
-# Run dependency installer (best-effort)
+# Ensure Homebrew exists and is on PATH
+ensure_brew() {
+  if command -v brew >/dev/null 2>&1; then
+    return 0
+  fi
+  log "Homebrew not found; installing (non-interactive)"
+  NONINTERACTIVE=1 /bin/bash -c "$(/usr/bin/curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+  # Detect brew binary path (Apple Silicon vs Intel)
+  local brew_bin=""
+  if [ -x /opt/homebrew/bin/brew ]; then
+    brew_bin=/opt/homebrew/bin/brew
+  elif [ -x /usr/local/bin/brew ]; then
+    brew_bin=/usr/local/bin/brew
+  else
+    brew_bin="$(command -v brew || true)"
+  fi
+  if [ -z "${brew_bin}" ]; then
+    err "Homebrew installation appears to have failed (brew not found on PATH)."
+    exit 1
+  fi
+
+  # shellenv for current session
+  eval "$(${brew_bin} shellenv)"
+
+  # Persist shellenv in ~/.zprofile if not already present
+  local ZPROFILE="$HOME/.zprofile"
+  local SHELLENV_LINE="eval \"\$(${brew_bin} shellenv)\""
+  if [ ! -f "$ZPROFILE" ] || ! grep -Fq "$SHELLENV_LINE" "$ZPROFILE"; then
+    log "Appending Homebrew shellenv to ~/.zprofile"
+    printf "\n%s\n" "$SHELLENV_LINE" >> "$ZPROFILE"
+  fi
+}
+
+ensure_brew
+
+# Install/update dependencies (includes eza)
 if [ -x "$REPO_DIR/bin/mzsh-install-deps" ]; then
   log "Installing/updating dependencies"
-  "$REPO_DIR/bin/mzsh-install-deps" || true
+  "$REPO_DIR/bin/mzsh-install-deps"
 else
-  log "Installer not found at $REPO_DIR/bin/mzsh-install-deps"
+  err "Installer not found at $REPO_DIR/bin/mzsh-install-deps"
+  exit 1
+fi
+
+# Install Oh My Zsh if missing (non-interactive)
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+  log "Installing Oh My Zsh (non-interactive)"
+  RUNZSH=no CHSH=no KEEP_ZSHRC=yes \
+    sh -c "$(/usr/bin/curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+else
+  log "Oh My Zsh already installed"
 fi
 
 # Ensure source line in ~/.zshrc

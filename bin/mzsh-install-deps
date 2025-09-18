@@ -26,15 +26,24 @@ pkgs=(
   jq
   ffmpeg
   sevenzip
-  jq
   poppler
   fd
   ripgrep
   zoxide
   resvg
   imagemagick
+  gping
 )
 
+# Install packages if missing
+for pkg in "${pkgs[@]}"; do
+  if brew list --formula --versions "$pkg" >/dev/null 2>&1; then
+    echo "[mzsh] $pkg already installed"
+  else
+    echo "[mzsh] Installing $pkg"
+    brew install "$pkg"
+  fi
+done
 
 # Install zsh-interactive-cd as an Oh My Zsh custom plugin
 ZSH_CUSTOM_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"

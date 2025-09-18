@@ -93,15 +93,26 @@ Tools (enabled/configured)
 Oh My Zsh plugins (enabled by default)
 - git: adds many aliases
   - Examples: gst (git status), gco (git checkout/switch), gl (git pull), gb (git branch), gaa (git add --all), gcam (git commit -am)
+  - More: gcm (git commit -m), gpo (git push origin), gpf (git push --force-with-lease)
 - docker, docker-compose: convenience aliases and completions for Docker and Compose
+  - Examples: dps (docker ps), dcu (docker-compose up), dcd (docker-compose down), dcb (docker-compose build), dclf (docker container logs -f)
   - Tip: list available aliases with: alias | grep '^d' | sort
 - gh: completions and helpers for GitHub CLI
-  - Examples: gh repo view, gh pr status, gh issue list
+  - Examples: gh repo view, gh pr status, gh pr create -w, gh issue list
 - dotenv: helpers for .env workflows (use with care in untrusted repos)
+  - Example: dotenv export > /dev/null && <command>  # load .env vars for a single command
 - dotnet: completions and helpers for the dotnet CLI
+  - Examples: dotnet new, dotnet build, dotnet test
 - fzf: integrates fzf with zsh where available
+  - Example: fc -rl 1 | fzf  # browse history (Atuin provides Ctrl-r too)
 - eza: additional aliases for eza
+  - Examples: l (eza -la), lt (eza -T)
 - jump, z: directory jumping helpers (install the tool you prefer)
+  - z examples: z src, z -l, z -r pattern
+  - jump examples (optional, requires `brew install jump`):
+    - j proj         # jump to a directory matching "proj"
+    - j --stat       # show database stats
+    - j --purge      # remove non-existing paths from the db
 
 ## Structure
 - init.zsh                # Entry point that sources modules below

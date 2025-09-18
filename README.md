@@ -74,6 +74,10 @@ This installs via Homebrew:
 - atuin
 - z
 
+Notes:
+- z: initialized automatically if Homebrew’s /opt/homebrew/etc/profile.d/z.sh is present.
+- atuin: initialized automatically at shell startup.
+
 Installed as an Oh My Zsh custom plugin (cloned into $ZSH_CUSTOM/plugins):
 - zsh-interactive-cd
 

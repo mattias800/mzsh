@@ -31,34 +31,6 @@ pkgs=(
   imagemagick
 )
 
-# Casks to install (handled separately)
-casks=(
-  font-symbols-only-nerd-font
-)
-
-for pkg in "${pkgs[@]}"; do
-  if brew list --formula "$pkg" >/dev/null 2>&1; then
-    echo "[mzsh] $pkg already installed"
-  else
-    echo "[mzsh] Installing $pkg"
-    brew install "$pkg"
-  fi
-done
-
-# Ensure the cask fonts tap exists before installing fonts
-if ! brew tap | grep -q "^homebrew/cask-fonts$"; then
-  echo "[mzsh] Adding tap homebrew/cask-fonts"
-  brew tap homebrew/cask-fonts
-fi
-
-for cask in "${casks[@]}"; do
-  if brew list --cask "$cask" >/dev/null 2>&1; then
-    echo "[mzsh] $cask already installed (cask)"
-  else
-    echo "[mzsh] Installing $cask (cask)"
-    brew install --cask "$cask"
-  fi
-done
 
 # Install zsh-interactive-cd as an Oh My Zsh custom plugin
 ZSH_CUSTOM_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"

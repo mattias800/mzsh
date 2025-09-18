@@ -31,3 +31,8 @@ fi
 if command -v atuin >/dev/null 2>&1; then
   eval "$(atuin init zsh)"
 fi
+
+# Initialize z (directory jumping) if provided by Homebrew
+if [ -f /opt/homebrew/etc/profile.d/z.sh ]; then
+  . /opt/homebrew/etc/profile.d/z.sh
+fi

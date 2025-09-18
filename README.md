@@ -48,6 +48,69 @@ This command will:
 - Fast-forward pull the current branch (or main)
 - Re-run the dependency installer
 
+## Guide
+
+The tools below are installed or enabled by this config. Here are handy examples to get started.
+
+- eza (ls replacement)
+  - ls                      # aliased to: eza -al
+  - eza -la --git           # long, all, include git status columns
+  - eza -T                  # tree view of current directory
+- bat (cat replacement)
+  - cat file.txt            # aliased to: bat --paging=never --style=plain file.txt
+  - bat -n file.txt         # show line numbers
+- yazi (terminal file manager)
+  - yazi                    # launch in current directory; q to quit
+- fzf (fuzzy finder)
+  - fzf --preview 'bat --style=plain --color=always {} | head -200'
+  - Note: Shell keybindings/completions are not auto-installed. See: https://github.com/junegunn/fzf#installation
+  - gswi                     # fuzzy switch git branches with previews (provided by tools/git.zsh)
+- Atuin (shell history)
+  - Ctrl-r                  # fuzzy search history (atuin overrides Ctrl-r)
+  - atuin login             # optional: set up sync
+  - atuin import auto       # optional: import existing history
+- z (frecent directory jumper)
+  - z project               # jump to directories you've visited matching "project"
+  - z -l                    # list ranked matches
+  - z -r docs               # remove a path from database that matches docs
+- git-delta (better git pager)
+  - Optional setup to use delta for diffs and paging:
+    git config --global core.pager delta
+    git config --global interactive.diffFilter 'delta --color-only'
+    git config --global delta.navigate true
+    git config --global delta.light false
+- htop (interactive process viewer)
+  - htop                    # live CPU/mem view; F to filter; / to search; q to quit
+  - htop -u "$USER"         # show only your processes
+- pstree (process tree)
+  - pstree -p -a            # show PIDs and command line
+- jq (JSON processor)
+  - jq . package.json       # pretty-print JSON
+  - curl -s https://api.github.com | jq '.rate_limit'  # filter a field
+- fd (find files fast)
+  - fd src                  # list files whose path contains "src"
+  - fd -e tsx -t f src      # only .tsx files under src
+- ripgrep (rg: fast grep)
+  - rg "TODO:" -n           # search recursively with line numbers
+  - rg -S "exact?case"       # smart case; treat uppercase as case-sensitive
+  - rg -g '!node_modules' pattern   # ignore node_modules
+- zoxide (alternative jumper; optional)
+  - Not auto-initialized by default. To enable, add to local.zsh:
+    eval "$(zoxide init zsh)"
+  - Then use: z foo (similar to z)
+- ffmpeg (media toolbelt)
+  - ffmpeg -i in.mp4 -vn -acodec copy out.aac  # extract audio
+  - ffmpeg -i in.mov -vf scale=1280:-2 out.mp4 # resize keeping aspect
+- ImageMagick (magick)
+  - magick convert in.png -resize 50% out.png
+  - magick mogrify -format jpg *.png
+- Poppler (PDF utils)
+  - pdftotext file.pdf out.txt
+  - pdftoppm file.pdf page -png   # page-1.png, page-2.png, ...
+- 7-Zip (sevenzip)
+  - 7zz a archive.7z folder/
+  - 7zz x archive.7z
+
 ## Structure
 - init.zsh                # Entry point that sources modules below
 - plugins/omz.zsh         # oh-my-zsh bootstrap (no theme)
@@ -89,31 +152,6 @@ Oh My Zsh plugins enabled by default in this config:
 - docker, docker-compose, fzf, dotnet, dotenv, eza, gh, git, jump, z
 Note: These plugins expect the corresponding tools to be installed (except dotenv). Install whichever you use; others will simply be inactive if the tool is missing.
 
-## Guide
-
-Tools
-- eza: Modern ls replacement with colors, icons, and git info. With the OMZ eza plugin enabled, common ls commands are aliased to eza. Examples:
-  - eza -la         # long, all
-  - eza -T          # tree view
-  - eza -la --git   # include git status columns
-- bat: cat replacement with syntax highlighting. In this config, cat is aliased to bat --paging=never --style=plain if bat is installed. To bypass, run command cat or /bin/cat.
-- yazi: A fast terminal file manager. Launch with yazi from any directory; q to quit.
-- fzf: Fuzzy finder used by helpers like gswi (see below). Install key bindings/completions separately if desired.
-- atuin: Fast, syncable shell history. After install, it's initialized automatically. Use Ctrl-r for fuzzy history search (configurable in Atuin).
-
-Git helper
-- gswi: Fuzzy switch to a local or remote branch with preview.
-  - Fetches/prunes, lists branches by recent activity, shows recent commits in a preview, then switches.
-  - Requires fzf. Run ~/.mzsh/bin/mzsh-install-deps to install it.
-
-Enabled OMZ plugins (high-level)
-- docker, docker-compose: Aliases and completions for Docker and Compose.
-- fzf: Convenience functions around fzf.
-- dotnet: Aliases/completions for the dotnet CLI.
-- dotenv: Helpers for working with .env files. Be mindful when auto-loading environment from arbitrary repos.
-- eza: Aliases ls to eza variants.
-- gh: Aliases/completions for GitHub CLI.
-- git: A rich set of git aliases (e.g., gst, gco, gl, gb, gaa, gcam).
 - jump, z: Directory jumping helpers. Install the tools (jump, z) you prefer; unused plugins remain inactive.
 
 

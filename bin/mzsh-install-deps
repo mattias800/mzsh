@@ -18,6 +18,8 @@ pkgs=(
   bat
   eza
   yazi
+  atuin
+  z
   ffmpeg
   sevenzip
   jq

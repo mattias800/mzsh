@@ -71,12 +71,14 @@ This installs via Homebrew:
 - bat
 - eza
 - yazi
+- atuin
+- z
 
 Installed as an Oh My Zsh custom plugin (cloned into $ZSH_CUSTOM/plugins):
 - zsh-interactive-cd
 
 Oh My Zsh plugins enabled by default in this config:
-- docker, docker-compose, fzf, dotnet, dotenv, eza, gh, git, jump, autojump
+- docker, docker-compose, fzf, dotnet, dotenv, eza, gh, git, jump, z
 Note: These plugins expect the corresponding tools to be installed (except dotenv). Install whichever you use; others will simply be inactive if the tool is missing.
 
 ## Guide
@@ -89,6 +91,7 @@ Tools
 - bat: cat replacement with syntax highlighting. In this config, cat is aliased to bat --paging=never --style=plain if bat is installed. To bypass, run command cat or /bin/cat.
 - yazi: A fast terminal file manager. Launch with yazi from any directory; q to quit.
 - fzf: Fuzzy finder used by helpers like gswi (see below). Install key bindings/completions separately if desired.
+- atuin: Fast, syncable shell history. After install, it's initialized automatically. Use Ctrl-r for fuzzy history search (configurable in Atuin).
 
 Git helper
 - gswi: Fuzzy switch to a local or remote branch with preview.
@@ -103,7 +106,7 @@ Enabled OMZ plugins (high-level)
 - eza: Aliases ls to eza variants.
 - gh: Aliases/completions for GitHub CLI.
 - git: A rich set of git aliases (e.g., gst, gco, gl, gb, gaa, gcam).
-- jump, autojump: Integration with jump/autojump if installed (directory jumping). If neither tool is installed, these plugins remain inactive.
+- jump, z: Directory jumping helpers. Install the tools (jump, z) you prefer; unused plugins remain inactive.
 
 
 ## Notes

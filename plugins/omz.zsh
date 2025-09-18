@@ -15,7 +15,7 @@ default_plugins=(
   gh
   git
   jump
-  autojump
+  z
 )
 
 if (( ${+plugins} && ${#plugins[@]} > 0 )); then

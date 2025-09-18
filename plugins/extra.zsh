@@ -26,3 +26,8 @@ elif [ -f "$HOME/.oh-my-zsh/custom/plugins/zsh-interactive-cd/zsh-interactive-cd
 elif [ -f /opt/homebrew/share/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh ]; then
   source /opt/homebrew/share/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh
 fi
+
+# Atuin history (if installed)
+if command -v atuin >/dev/null 2>&1; then
+  eval "$(atuin init zsh)"
+fi

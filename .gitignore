@@ -1,0 +1,12 @@
+# Local overrides (never commit machine-specific tweaks)
+local.zsh
+
+# IDE
+.idea/
+
+# Node tool caches (defensive)
+.npm/
+.pnpm-store/
+
+# macOS fluff
+.DS_Store

@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# mzsh: install recommended dependencies on macOS via Homebrew
+# Safe to re-run; will skip already installed packages.
+
+if ! command -v brew >/dev/null 2>&1; then
+  echo "Homebrew not found. Please install Homebrew first: https://brew.sh" >&2
+  exit 1
+fi
+
+# Formulae to install via Homebrew
+pkgs=(
+  git
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+  fzf
+  zsh-interactive-cd
+  bat
+  # Requested additions
+  yazi
+  ffmpeg
+  sevenzip
+  jq
+  poppler
+  fd
+  ripgrep
+  zoxide
+  resvg
+  imagemagick
+)
+
+# Casks to install (handled separately)
+casks=(
+  font-symbols-only-nerd-font
+)
+
+for pkg in "${pkgs[@]}"; do
+  if brew list --formula "$pkg" >/dev/null 2>&1; then
+    echo "[mzsh] $pkg already installed"
+  else
+    echo "[mzsh] Installing $pkg"
+    brew install "$pkg"
+  fi
+done
+
+# Ensure the cask fonts tap exists before installing fonts
+if ! brew tap | grep -q "^homebrew/cask-fonts$"; then
+  echo "[mzsh] Adding tap homebrew/cask-fonts"
+  brew tap homebrew/cask-fonts
+fi
+
+for cask in "${casks[@]}"; do
+  if brew list --cask "$cask" >/dev/null 2>&1; then
+    echo "[mzsh] $cask already installed (cask)"
+  else
+    echo "[mzsh] Installing $cask (cask)"
+    brew install --cask "$cask"
+  fi
+done
+
+echo "[mzsh] Done. If needed, restart your terminal."

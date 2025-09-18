@@ -54,65 +54,129 @@ This section lists what this repo adds: aliases, functions, scripts, tools enabl
 
 Aliases
 - ls => eza -al (if eza is installed)
-  - Bypass: command ls or /bin/ls
+  ```bash
+  # Bypass
+  command ls
+  /bin/ls
+  ```
 - cat => bat --paging=never --style=plain (if bat is installed)
-  - Bypass: command cat or /bin/cat
+  ```bash
+  # Bypass
+  command cat
+  /bin/cat
+  ```
 - Docker Compose helpers
-  - dcdu     # docker compose down && docker compose up --build
-  - dcdua    # docker compose down && docker compose --profile all up --build
-  - dcua     # docker compose --profile all up --build
+  ```bash
+  dcdu      # docker compose down && docker compose up --build
+  dcdua     # docker compose down && docker compose --profile all up --build
+  dcua      # docker compose --profile all up --build
+  ```
 - Git cleanup
-  - gitprunelocal  # fetch/prune and delete local branches with gone upstream
+  ```bash
+  gitprunelocal   # fetch/prune and delete local branches with gone upstream
+  ```
 
 Functions
 - gswi (Git Switch Interactive)
-  - gswi                  # fuzzy-pick local/remote branch with preview; switches or creates tracking branch
-  - Requires: fzf
+  ```bash
+  gswi   # fuzzy-pick local/remote branch with preview; switches or creates tracking branch
+  ```
+  Requires: fzf
 
 Scripts
 - ~/.mzsh/bin/mzsh-install-deps
-  - Installs recommended tools via Homebrew
+  ```bash
+  ~/.mzsh/bin/mzsh-install-deps
+  ```
 - ~/.mzsh/bin/mzsh-update
-  - Fast-forward pulls the repo and re-runs the installer (safe: refuses if you have local changes)
+  ```bash
+  mzsh-update
+  ```
+  Fast-forward pulls the repo and re-runs the installer (safe: refuses if you have local changes)
 
 Tools (enabled/configured)
 - eza (ls replacement)
-  - eza -la --git         # long listing incl. git columns
-  - eza -T                # tree view
+  ```bash
+  eza -la --git     # long listing incl. git columns
+  eza -T            # tree view
+  ```
 - bat (cat replacement)
-  - bat -n file.txt       # show line numbers
+  ```bash
+  bat -n file.txt   # show line numbers
+  ```
 - yazi (terminal file manager)
-  - yazi                  # launch in current dir; q to quit
+  ```bash
+  yazi              # launch in current dir; q to quit
+  ```
 - fzf (fuzzy finder)
-  - fzf --preview 'bat --style=plain --color=always {} | head -200'
+  ```bash
+  fzf --preview 'bat --style=plain --color=always {} | head -200'
+  ```
 - Atuin (shell history)
-  - Ctrl-r                # fuzzy search history (provided by Atuin)
+  ```bash
+  # Atuin binds Ctrl-r to fuzzy search history by default
+  ```
 - z (frecent directory jumper)
-  - z project             # jump to a frequently used directory matching "project"
+  ```bash
+  z project         # jump to a frequently used directory matching "project"
+  ```
 
 Oh My Zsh plugins (enabled by default)
 - git: adds many aliases
-  - Examples: gst (git status), gco (git checkout/switch), gl (git pull), gb (git branch), gaa (git add --all), gcam (git commit -am)
-  - More: gcm (git commit -m), gpo (git push origin), gpf (git push --force-with-lease)
+  ```bash
+  gst         # git status
+  gco main    # git switch/checkout main
+  gcm "msg"   # git commit -m "msg"
+  gpo         # git push origin
+  gpf         # git push --force-with-lease
+  ```
 - docker, docker-compose: convenience aliases and completions for Docker and Compose
-  - Examples: dps (docker ps), dcu (docker-compose up), dcd (docker-compose down), dcb (docker-compose build), dclf (docker container logs -f)
-  - Tip: list available aliases with: alias | grep '^d' | sort
+  ```bash
+  dps         # docker ps
+  dcu         # docker-compose up
+  dcd         # docker-compose down
+  dcb         # docker-compose build
+  dclf        # docker container logs -f
+  ```
+  Tip: list available aliases with: alias | grep '^d' | sort
 - gh: completions and helpers for GitHub CLI
-  - Examples: gh repo view, gh pr status, gh pr create -w, gh issue list
+  ```bash
+  gh repo view
+  gh pr status
+  gh pr create -w
+  gh issue list
+  ```
 - dotenv: helpers for .env workflows (use with care in untrusted repos)
-  - Example: dotenv export > /dev/null && <command>  # load .env vars for a single command
+  ```bash
+  dotenv export > /dev/null && <command>  # load .env vars for a single command
+  ```
 - dotnet: completions and helpers for the dotnet CLI
-  - Examples: dotnet new, dotnet build, dotnet test
+  ```bash
+  dotnet new
+  dotnet build
+  dotnet test
+  ```
 - fzf: integrates fzf with zsh where available
-  - Example: fc -rl 1 | fzf  # browse history (Atuin provides Ctrl-r too)
+  ```bash
+  fc -rl 1 | fzf  # browse history (Atuin provides Ctrl-r too)
+  ```
 - eza: additional aliases for eza
-  - Examples: l (eza -la), lt (eza -T)
+  ```bash
+  l      # eza -la
+  lt     # eza -T
+  ```
 - jump, z: directory jumping helpers (install the tool you prefer)
-  - z examples: z src, z -l, z -r pattern
-  - jump examples (optional, requires `brew install jump`):
-    - j proj         # jump to a directory matching "proj"
-    - j --stat       # show database stats
-    - j --purge      # remove non-existing paths from the db
+  ```bash
+  # z
+  z src
+  z -l
+  z -r pattern
+
+  # jump (optional; brew install jump)
+  j proj
+  j --stat
+  j --purge
+  ```
 
 ## Structure
 - init.zsh                # Entry point that sources modules below

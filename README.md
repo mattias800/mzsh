@@ -73,6 +73,9 @@ This installs via Homebrew:
 - yazi
 - atuin
 - z
+- git-delta
+- htop
+- pstree
 
 Notes:
 - z: initialized automatically if Homebrew’s /opt/homebrew/etc/profile.d/z.sh is present.

@@ -20,6 +20,9 @@ pkgs=(
   yazi
   atuin
   z
+  git-delta
+  htop
+  pstree
   ffmpeg
   sevenzip
   jq

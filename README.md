@@ -59,6 +59,13 @@ Aliases
   command ls
   /bin/ls
   ```
+- lt => eza -T --level=${MZSH_LT_LEVEL:-2} (tree view with limited depth)
+  ```bash
+  # Show current directory tree up to 2 levels
+  lt
+  # Override depth for a single call
+  MZSH_LT_LEVEL=3 lt src
+  ```
 - cat => bat --paging=never --style=plain (if bat is installed)
   ```bash
   # Bypass
@@ -97,12 +104,19 @@ Scripts
 Tools (enabled/configured)
 - eza (ls replacement)
   ```bash
-  eza -la --git     # long listing incl. git columns
-  eza -T            # tree view
+  eza -la --git           # long listing incl. git columns
+  lt                      # tree view via eza with limited depth (default level=2)
+  MZSH_LT_LEVEL=3 lt src  # override depth for a single command
   ```
 - bat (cat replacement)
   ```bash
-  bat -n file.txt   # show line numbers
+  bat -n file.txt         # show line numbers
+  ```
+- gping (graphical ping)
+  ```bash
+  gping 1.1.1.1                   # live latency graph to Cloudflare DNS
+  gping --avg google.com          # include rolling average
+  gping --rate 0.25 github.com    # ping every 4s to reduce noise
   ```
 - yazi (terminal file manager)
   ```bash

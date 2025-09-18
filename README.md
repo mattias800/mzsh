@@ -5,7 +5,7 @@ Modular Zsh configuration for macOS. Clone, source `init.zsh` from your local `~
 ## Quick start
 
 1) Clone (recommended location):
-   git clone https://github.com/<your-username>/mzsh.git "$HOME/.mzsh"
+   git clone https://github.com/mattias800/mzsh.git "$HOME/.mzsh"
 
 2) Source from your local ~/.zshrc (append once):
    echo 'source "$HOME/.mzsh/init.zsh"' >> "$HOME/.zshrc"
@@ -13,6 +13,16 @@ Modular Zsh configuration for macOS. Clone, source `init.zsh` from your local `~
 3) Restart your terminal.
 
 Note: The config is relocatable. `init.zsh` sources all modules relative to its own path, so you can clone it anywhere; just adjust the source line accordingly. PATH for tools is expected to be handled by each tool’s installer.
+
+## Bootstrap (one-liner)
+
+Copy-paste to install dependencies, clone (if not present), and enable in `~/.zshrc` idempotently:
+
+```
+/bin/zsh -lc 'REPO="$HOME/.mzsh"; [ -d "$REPO/.git" ] || git clone https://github.com/mattias800/mzsh "$REPO"; "$REPO/bin/mzsh-install-deps"; grep -qF "source \"$HOME/.mzsh/init.zsh\"" "$HOME/.zshrc" || echo "source \"$HOME/.mzsh/init.zsh\"" >> "$HOME/.zshrc"'
+```
+
+Then restart the terminal (or run `exec zsh`).
 
 ## Structure
 - init.zsh                # Entry point that sources modules below

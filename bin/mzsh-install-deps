@@ -23,6 +23,7 @@ pkgs=(
   git-delta
   htop
   pstree
+  jq
   ffmpeg
   sevenzip
   jq

@@ -76,6 +76,7 @@ This installs via Homebrew:
 - git-delta
 - htop
 - pstree
+- jq
 
 Notes:
 - z: initialized automatically if Homebrew’s /opt/homebrew/etc/profile.d/z.sh is present.

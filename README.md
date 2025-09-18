@@ -24,6 +24,20 @@ Copy-paste to install dependencies, clone (if not present), and enable in `~/.zs
 
 Then restart the terminal (or run `exec zsh`).
 
+## Updating
+
+After pulling new changes, you can update dependencies and the repo safely with:
+
+```
+mzsh-update
+```
+
+This command will:
+- Clone ~/.mzsh if missing (respects $MZSH_DIR if set)
+- Refuse to overwrite local changes
+- Fast-forward pull the current branch (or main)
+- Re-run the dependency installer
+
 ## Structure
 - init.zsh                # Entry point that sources modules below
 - plugins/omz.zsh         # oh-my-zsh bootstrap (no theme)

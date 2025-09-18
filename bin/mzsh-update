@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+REPO_DIR="${MZSH_DIR:-$HOME/.mzsh}"
+
+if [ ! -d "$REPO_DIR/.git" ]; then
+  echo "[mzsh] Repository not found at $REPO_DIR; cloning..." >&2
+  git clone https://github.com/mattias800/mzsh "$REPO_DIR"
+fi
+
+if ! command -v git >/dev/null 2>&1; then
+  echo "[mzsh] git is required. Install Xcode Command Line Tools or run: $REPO_DIR/bin/mzsh-install-deps" >&2
+  exit 1
+fi
+
+# Refuse to update if there are local changes to avoid accidental overwrites
+if [ -n "$(git -C "$REPO_DIR" status --porcelain)" ]; then
+  echo "[mzsh] Local changes detected in $REPO_DIR. Commit/stash/discard them before updating." >&2
+  exit 1
+fi
+
+# Fetch and fast-forward the current branch
+current_branch=$(git -C "$REPO_DIR" rev-parse --abbrev-ref HEAD)
+if [ "$current_branch" = "HEAD" ]; then
+  # Detached HEAD; default to main
+  current_branch=main
+fi
+
+echo "[mzsh] Updating $REPO_DIR (branch: $current_branch)"
+git -C "$REPO_DIR" fetch --prune --quiet
+# Try to switch to branch if not on it
+if ! git -C "$REPO_DIR" rev-parse --verify --quiet "$current_branch" >/dev/null; then
+  current_branch=main
+fi
+
+# Ensure on branch, then fast-forward only
+if [ "$(git -C "$REPO_DIR" rev-parse --abbrev-ref HEAD)" != "$current_branch" ]; then
+  git -C "$REPO_DIR" switch "$current_branch"
+fi
+
+git -C "$REPO_DIR" pull --ff-only --quiet || {
+  echo "[mzsh] Fast-forward failed. You might have diverged from origin. Resolve manually." >&2
+  exit 1
+}
+
+# Reinstall/ensure dependencies
+"$REPO_DIR/bin/mzsh-install-deps"
+
+echo "[mzsh] Update complete. Restart your terminal or run: exec zsh"

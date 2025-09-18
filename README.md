@@ -50,66 +50,58 @@ This command will:
 
 ## Guide
 
-The tools below are installed or enabled by this config. Here are handy examples to get started.
+This section lists what this repo adds: aliases, functions, scripts, tools enabled, and OMZ plugins with examples.
 
+Aliases
+- ls => eza -al (if eza is installed)
+  - Bypass: command ls or /bin/ls
+- cat => bat --paging=never --style=plain (if bat is installed)
+  - Bypass: command cat or /bin/cat
+- Docker Compose helpers
+  - dcdu     # docker compose down && docker compose up --build
+  - dcdua    # docker compose down && docker compose --profile all up --build
+  - dcua     # docker compose --profile all up --build
+- Git cleanup
+  - gitprunelocal  # fetch/prune and delete local branches with gone upstream
+
+Functions
+- gswi (Git Switch Interactive)
+  - gswi                  # fuzzy-pick local/remote branch with preview; switches or creates tracking branch
+  - Requires: fzf
+
+Scripts
+- ~/.mzsh/bin/mzsh-install-deps
+  - Installs recommended tools via Homebrew
+- ~/.mzsh/bin/mzsh-update
+  - Fast-forward pulls the repo and re-runs the installer (safe: refuses if you have local changes)
+
+Tools (enabled/configured)
 - eza (ls replacement)
-  - ls                      # aliased to: eza -al
-  - eza -la --git           # long, all, include git status columns
-  - eza -T                  # tree view of current directory
+  - eza -la --git         # long listing incl. git columns
+  - eza -T                # tree view
 - bat (cat replacement)
-  - cat file.txt            # aliased to: bat --paging=never --style=plain file.txt
-  - bat -n file.txt         # show line numbers
+  - bat -n file.txt       # show line numbers
 - yazi (terminal file manager)
-  - yazi                    # launch in current directory; q to quit
+  - yazi                  # launch in current dir; q to quit
 - fzf (fuzzy finder)
   - fzf --preview 'bat --style=plain --color=always {} | head -200'
-  - Note: Shell keybindings/completions are not auto-installed. See: https://github.com/junegunn/fzf#installation
-  - gswi                     # fuzzy switch git branches with previews (provided by tools/git.zsh)
 - Atuin (shell history)
-  - Ctrl-r                  # fuzzy search history (atuin overrides Ctrl-r)
-  - atuin login             # optional: set up sync
-  - atuin import auto       # optional: import existing history
+  - Ctrl-r                # fuzzy search history (provided by Atuin)
 - z (frecent directory jumper)
-  - z project               # jump to directories you've visited matching "project"
-  - z -l                    # list ranked matches
-  - z -r docs               # remove a path from database that matches docs
-- git-delta (better git pager)
-  - Optional setup to use delta for diffs and paging:
-    git config --global core.pager delta
-    git config --global interactive.diffFilter 'delta --color-only'
-    git config --global delta.navigate true
-    git config --global delta.light false
-- htop (interactive process viewer)
-  - htop                    # live CPU/mem view; F to filter; / to search; q to quit
-  - htop -u "$USER"         # show only your processes
-- pstree (process tree)
-  - pstree -p -a            # show PIDs and command line
-- jq (JSON processor)
-  - jq . package.json       # pretty-print JSON
-  - curl -s https://api.github.com | jq '.rate_limit'  # filter a field
-- fd (find files fast)
-  - fd src                  # list files whose path contains "src"
-  - fd -e tsx -t f src      # only .tsx files under src
-- ripgrep (rg: fast grep)
-  - rg "TODO:" -n           # search recursively with line numbers
-  - rg -S "exact?case"       # smart case; treat uppercase as case-sensitive
-  - rg -g '!node_modules' pattern   # ignore node_modules
-- zoxide (alternative jumper; optional)
-  - Not auto-initialized by default. To enable, add to local.zsh:
-    eval "$(zoxide init zsh)"
-  - Then use: z foo (similar to z)
-- ffmpeg (media toolbelt)
-  - ffmpeg -i in.mp4 -vn -acodec copy out.aac  # extract audio
-  - ffmpeg -i in.mov -vf scale=1280:-2 out.mp4 # resize keeping aspect
-- ImageMagick (magick)
-  - magick convert in.png -resize 50% out.png
-  - magick mogrify -format jpg *.png
-- Poppler (PDF utils)
-  - pdftotext file.pdf out.txt
-  - pdftoppm file.pdf page -png   # page-1.png, page-2.png, ...
-- 7-Zip (sevenzip)
-  - 7zz a archive.7z folder/
-  - 7zz x archive.7z
+  - z project             # jump to a frequently used directory matching "project"
+
+Oh My Zsh plugins (enabled by default)
+- git: adds many aliases
+  - Examples: gst (git status), gco (git checkout/switch), gl (git pull), gb (git branch), gaa (git add --all), gcam (git commit -am)
+- docker, docker-compose: convenience aliases and completions for Docker and Compose
+  - Tip: list available aliases with: alias | grep '^d' | sort
+- gh: completions and helpers for GitHub CLI
+  - Examples: gh repo view, gh pr status, gh issue list
+- dotenv: helpers for .env workflows (use with care in untrusted repos)
+- dotnet: completions and helpers for the dotnet CLI
+- fzf: integrates fzf with zsh where available
+- eza: additional aliases for eza
+- jump, z: directory jumping helpers (install the tool you prefer)
 
 ## Structure
 - init.zsh                # Entry point that sources modules below

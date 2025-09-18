@@ -2,6 +2,20 @@
 
 Modular Zsh configuration for macOS. Clone, source `init.zsh` from your local `~/.zshrc`, and you're set.
 
+## Prerequisites
+
+- macOS with Zsh (5.8+). macOS includes Zsh by default.
+- Homebrew (required for dependency installation):
+  ```bash
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  ```
+- Oh My Zsh (required for the OMZ plugins used here):
+  ```bash
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  ```
+- curl (built-in on macOS)
+- git (optional; the installer will install it via Homebrew if missing)
+
 ## Quick start
 
 ```bash

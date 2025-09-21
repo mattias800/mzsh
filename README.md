@@ -201,8 +201,11 @@ Oh My Zsh plugins (enabled by default)
   gh pr create -w
   gh issue list
   ```
-- dotenv: helpers for .env workflows (use with care in untrusted repos)
+- dotenv: helpers for .env workflows (auto-loads .env without prompting; use with care in untrusted repos)
   ```bash
+  # Auto-load is enabled by default (ZSH_DOTENV_PROMPT=false).
+  # To disable prompting/auto-load locally, set in ~/.mzsh/local.zsh:
+  #   export ZSH_DOTENV_PROMPT=true
   dotenv export > /dev/null && <command>  # load .env vars for a single command
   ```
 - dotnet: completions and helpers for the dotnet CLI

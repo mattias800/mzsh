@@ -14,6 +14,8 @@ Usage: mzsh <command> [args]
 Commands:
   secrets pull [--manifest PATH] [--provider PROVIDER] [--dry-run]
   secrets sample [--manifest PATH]
+  secrets install [op|bw|lpass|all]     # install required CLI(s) via Homebrew
+  secrets doctor                        # check setup and provide guidance
 
 Examples:
   mzsh secrets sample                           # write example manifest if missing

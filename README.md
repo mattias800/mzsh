@@ -57,6 +57,12 @@ Secrets (optional)
 - Nothing secret is committed; values are written to local.zsh (which is .gitignored).
 - Supported managers: 1Password (op), Bitwarden (bw), LastPass (lpass), macOS Keychain (security)
   ```bash
+  # Install required CLIs via Homebrew
+  mzsh secrets install all
+
+  # Check setup and see guidance for sign-in/unlock steps
+  mzsh secrets doctor
+
   # Create an example manifest (edit it to match your vault item names/fields)
   mzsh secrets sample
 
@@ -67,6 +73,11 @@ Secrets (optional)
   mzsh secrets pull --provider op
   mzsh secrets pull --manifest ~/.config/mzsh/secrets.json
   ```
+- Provider setup quick tips:
+  - 1Password (op): Run op signin once.
+  - Bitwarden (bw): BW_SESSION=$(bw unlock --raw); export BW_SESSION; run bw login first time.
+  - LastPass (lpass): lpass login you@example.com; keep session active.
+  - Keychain: values pulled with security find-generic-password.
 - Manifest format (JSON array), examples:
   ```json
   [

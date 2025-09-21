@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cmd=${1:-}
+case "$cmd" in
+  secrets)
+    shift
+    exec "$HOME/.mzsh/bin/mzsh-secrets" "$@"
+    ;;
+  help|-h|--help|"")
+    cat <<'EOF'
+Usage: mzsh <command> [args]
+
+Commands:
+  secrets pull [--manifest PATH] [--provider PROVIDER] [--dry-run]
+  secrets sample [--manifest PATH]
+
+Examples:
+  mzsh secrets sample                           # write example manifest if missing
+  mzsh secrets pull                             # pull using default manifest
+  mzsh secrets pull --manifest ~/.config/mzsh/secrets.json
+  mzsh secrets pull --provider op               # force provider for all entries
+
+Secrets providers supported:
+  op        1Password CLI (op)
+  bw        Bitwarden CLI (bw)
+  lpass     LastPass CLI (lpass)
+  keychain  macOS Keychain (security)
+
+The pull command reads a manifest describing which secrets to fetch and
+writes them into ~/.mzsh/local.zsh between managed markers.
+EOF
+    ;;
+  *)
+    echo "mzsh: unknown command: $cmd" >&2
+    exit 1
+    ;;
+esac

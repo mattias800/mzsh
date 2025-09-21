@@ -1,5 +1,9 @@
 # Local overrides (never commit machine-specific tweaks)
 local.zsh
+# Secrets manifest and generated env files (avoid accidental commit)
+secrets.manifest.json
+secrets.env
+secrets.zsh
 
 # IDE
 .idea/

@@ -52,6 +52,36 @@ This command will:
 
 This section lists what this repo adds: aliases, functions, scripts, tools enabled, and OMZ plugins with examples.
 
+Secrets (optional)
+- You can pull secrets from a password manager into an ignored local file.
+- Nothing secret is committed; values are written to local.zsh (which is .gitignored).
+- Supported managers: 1Password (op), Bitwarden (bw), LastPass (lpass), macOS Keychain (security)
+  ```bash
+  # Create an example manifest (edit it to match your vault item names/fields)
+  mzsh secrets sample
+
+  # Pull secrets (writes exports into ~/.mzsh/local.zsh managed block)
+  mzsh secrets pull
+
+  # Force a specific provider or custom manifest path
+  mzsh secrets pull --provider op
+  mzsh secrets pull --manifest ~/.config/mzsh/secrets.json
+  ```
+- Manifest format (JSON array), examples:
+  ```json
+  [
+    { "env": "GITHUB_TOKEN", "provider": "op", "item": "GitHub Token", "field": "token" },
+    { "env": "NPM_TOKEN",    "provider": "bw", "item": "npm token",    "field": "password" },
+    { "env": "FOO_API_KEY",  "provider": "keychain", "service": "foo_api_key", "account": "$USER" },
+    { "env": "AWS_PROFILE",  "value": "personal" }
+  ]
+  ```
+- Notes:
+  - 1Password: sign in once (op signin) so op item get works.
+  - Bitwarden: ensure BW_SESSION is set (bw unlock --raw, then export BW_SESSION=...).
+  - LastPass: run lpass login once; keep session active.
+  - Keychain: values are retrieved via: security find-generic-password -s <service> -a <account> -w
+
 Aliases
 - ls => eza -al (if eza is installed)
   ```bash

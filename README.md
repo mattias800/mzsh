@@ -182,9 +182,10 @@ Tools (enabled/configured)
   ```bash
   # Atuin binds Ctrl-r to fuzzy search history by default
   ```
-- z (frecent directory jumper)
+- zoxide (fast directory jumper; provides z/zi commands)
   ```bash
   z project         # jump to a frequently used directory matching "project"
+  zi -              # jump to previous directory
   ```
 
 Plugins via zcomet (Oh My Zsh plugins loaded without installing OMZ)
@@ -234,17 +235,10 @@ Plugins via zcomet (Oh My Zsh plugins loaded without installing OMZ)
   l      # eza -la
   lt     # eza -T
   ```
-- jump, z: directory jumping helpers (install the tool you prefer)
+- zoxide: directory jumping helper (replaces z/autojump)
   ```bash
-  # z
   z src
-  z -l
-  z -r pattern
-
-  # jump (optional; brew install jump)
-  j proj
-  j --stat
-  j --purge
+  zi -
   ```
 
 ## Structure

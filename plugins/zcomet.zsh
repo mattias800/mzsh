@@ -41,8 +41,6 @@ zcomet load ohmyzsh/ohmyzsh plugins/dotnet
 zcomet load ohmyzsh/ohmyzsh plugins/dotenv
 zcomet load ohmyzsh/ohmyzsh plugins/eza
 zcomet load ohmyzsh/ohmyzsh plugins/gh
-zcomet load ohmyzsh/ohmyzsh plugins/jump
-zcomet load ohmyzsh/ohmyzsh plugins/z
 
 # You can add more plugins below using either GitHub repo names or URL specs, e.g.:
 # zcomet load zsh-users/zsh-autosuggestions

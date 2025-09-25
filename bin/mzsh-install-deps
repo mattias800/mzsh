@@ -4,47 +4,52 @@ set -euo pipefail
 # mzsh: install recommended dependencies on macOS via Homebrew
 # Safe to re-run; will skip already installed packages.
 
-if ! command -v brew >/dev/null 2>&1; then
-  echo "Homebrew not found. Please install Homebrew first: https://brew.sh" >&2
+# Ensure Homebrew exists and is on PATH (install if missing)
+ensure_brew() {
+  if command -v brew >/dev/null 2>&1; then
+    return 0
+  fi
+  echo "[mzsh] Homebrew not found; installing (non-interactive)"
+  NONINTERACTIVE=1 /bin/bash -c "$(/usr/bin/curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+  # Detect brew binary path (Apple Silicon vs Intel)
+  local brew_bin=""
+  if [ -x /opt/homebrew/bin/brew ]; then
+    brew_bin=/opt/homebrew/bin/brew
+  elif [ -x /usr/local/bin/brew ]; then
+    brew_bin=/usr/local/bin/brew
+  else
+    brew_bin="$(command -v brew || true)"
+  fi
+  if [ -z "${brew_bin}" ]; then
+    echo "[mzsh] ERROR: Homebrew installation appears to have failed (brew not found on PATH)." >&2
+    exit 1
+  fi
+
+  # shellenv for current session
+  eval "$(${brew_bin} shellenv)"
+
+  # Persist shellenv in ~/.zprofile if not already present
+  local ZPROFILE="$HOME/.zprofile"
+  local SHELLENV_LINE="eval \"\$(${brew_bin} shellenv)\""
+  if [ ! -f "$ZPROFILE" ] || ! grep -Fq "$SHELLENV_LINE" "$ZPROFILE"; then
+    echo "[mzsh] Appending Homebrew shellenv to ~/.zprofile"
+    printf "\n%s\n" "$SHELLENV_LINE" >> "$ZPROFILE"
+  fi
+}
+
+ensure_brew
+
+# Use Brewfile for dependency management
+REPO_DIR="${MZSH_DIR:-$HOME/.mzsh}"
+BREWFILE="$REPO_DIR/Brewfile"
+if [ ! -f "$BREWFILE" ]; then
+  echo "[mzsh] ERROR: Brewfile not found at $BREWFILE" >&2
   exit 1
 fi
 
-# Formulae to install via Homebrew
-pkgs=(
-  git
-  zsh-autosuggestions
-  zsh-syntax-highlighting
-  fzf
-  bat
-  eza
-  yazi
-  atuin
-  z
-  git-delta
-  htop
-  pstree
-  jq
-  ffmpeg
-  sevenzip
-  poppler
-  fd
-  ripgrep
-  zoxide
-  resvg
-  imagemagick
-  gping
-  bun
-)
-
-# Install packages if missing
-for pkg in "${pkgs[@]}"; do
-  if brew list --formula --versions "$pkg" >/dev/null 2>&1; then
-    echo "[mzsh] $pkg already installed"
-  else
-    echo "[mzsh] Installing $pkg"
-    brew install "$pkg"
-  fi
-done
+echo "[mzsh] Installing/updating packages from $BREWFILE"
+brew bundle --no-lock --file "$BREWFILE"
 
 # Ensure zcomet (plugin manager) is installed or updated
 ZCOMET_HOME="${ZCOMET_HOME:-$HOME/.zcomet}"

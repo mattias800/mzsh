@@ -1,5 +1,5 @@
 # zcomet bootstrap and plugin loader
-# Ensures zcomet is installed and loads desired plugins (including OMZ plugins without OMZ).
+# Ensures zcomet is installed and loads desired plugins (preferring native repos; falling back to OMZ snippets when needed).
 
 # Where to install zcomet
 ZCOMET_HOME=${ZCOMET_HOME:-$HOME/.zcomet}
@@ -27,21 +27,18 @@ autoload -Uz compinit
 ZSH_COMPDUMP_DIR=${ZSH_COMPDUMP_DIR:-$HOME/.zcompdump}
 compinit -C -d "$ZSH_COMPDUMP_DIR"
 
-# Load OMZ library bits if needed by plugins (minimal set)
-# You can add more libs if a plugin complains; most work without extra libs.
-# zcomet light ohmyzsh/ohmyzsh path:lib/functions.zsh
-# zcomet light ohmyzsh/ohmyzsh path:lib/git.zsh
+# Preferred non-OMZ plugins
+# Note: autosuggestions and syntax-highlighting are handled in plugins/extra.zsh
+# Use fzf-tab for powerful completion UI if available
+zcomet load Aloxaf/fzf-tab
 
-# Load plugins (OMZ plugins loaded directly from repo)
+# Fallback to OMZ plugin snippets when no first-class alternative is in use
+# Keep: git/docker/docker-compose/dotnet/dotenv/gh from OMZ
 zcomet load ohmyzsh/ohmyzsh plugins/git
 zcomet load ohmyzsh/ohmyzsh plugins/docker
 zcomet load ohmyzsh/ohmyzsh plugins/docker-compose
-zcomet load ohmyzsh/ohmyzsh plugins/fzf
 zcomet load ohmyzsh/ohmyzsh plugins/dotnet
 zcomet load ohmyzsh/ohmyzsh plugins/dotenv
-zcomet load ohmyzsh/ohmyzsh plugins/eza
 zcomet load ohmyzsh/ohmyzsh plugins/gh
 
-# You can add more plugins below using either GitHub repo names or URL specs, e.g.:
-# zcomet load zsh-users/zsh-autosuggestions
-# zcomet load zsh-users/zsh-syntax-highlighting
+# eza and fzf are not loaded via OMZ: eza aliases live in aliases/eza.zsh; fzf keybinds are handled elsewhere if desired.

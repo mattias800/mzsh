@@ -5,7 +5,7 @@ Modular Zsh configuration for macOS. Clone, source `init.zsh` from your local `~
 ## Prerequisites
 
 - macOS with Zsh (5.8+). macOS includes Zsh by default.
-- Homebrew (required for dependency installation):
+- Homebrew: the installer will automatically install and configure Homebrew if it is missing (non-interactive). Manual install is optional:
   ```bash
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   ```
@@ -197,7 +197,7 @@ Tools (enabled/configured)
   zi -              # jump to previous directory
   ```
 
-Plugins via zcomet (Oh My Zsh plugins loaded without installing OMZ)
+Plugins via zcomet (Oh My Zsh plugins loaded without installing OMZ where needed)
 - git: adds many aliases
   ```bash
   gst         # git status
@@ -211,8 +211,8 @@ Plugins via zcomet (Oh My Zsh plugins loaded without installing OMZ)
   dps         # docker ps
   dcu         # docker-compose up
   dcd         # docker-compose down
-  dcb         # docker-compose build
-  dclf        # docker container logs -f
+  dcb        # docker-compose build
+  dclf       # docker container logs -f
   ```
   Tip: list available aliases with: alias | grep '^d' | sort
 - gh: completions and helpers for GitHub CLI
@@ -235,11 +235,11 @@ Plugins via zcomet (Oh My Zsh plugins loaded without installing OMZ)
   dotnet build
   dotnet test
   ```
-- fzf: integrates fzf with zsh where available
+- fzf-tab: enhanced completion UI integrated with fzf
   ```bash
-  fc -rl 1 | fzf  # browse history (Atuin provides Ctrl-r too)
+  # Press Tab to invoke fzf-based menu (Aloxaf/fzf-tab)
   ```
-- eza: additional aliases for eza
+- eza: provided via aliases in this repo (no OMZ plugin needed)
   ```bash
   l      # eza -la
   lt     # eza -T
@@ -265,34 +265,25 @@ You can install recommended dependencies automatically:
 
     ~/.mzsh/bin/mzsh-install-deps
 
-This installs via Homebrew:
-- git
-- zsh-autosuggestions
-- zsh-syntax-highlighting
-- fzf
-- bat
-- eza
-- yazi
-- atuin
-- z
-- git-delta
-- htop
-- pstree
-- jq
-- gping
+This command will automatically install Homebrew first if it is missing, then install packages declared in the Brewfile via Homebrew.
+
+Brewfile
+- Location: ~/.mzsh/Brewfile
+- Contains taps, formulae, and casks. Key items:
+  - tap "isen-ng/dotnet-sdk-versions" to support multiple .NET SDK versions side-by-side
+  - cask "dotnet-sdk8" and cask "dotnet-sdk9" as examples; add/remove versions to suit your needs
+  - Common formulae used by this setup (git, fzf, eza, ripgrep, zoxide, bun, etc.)
 
 Notes:
-- z: initialized automatically if Homebrew’s /opt/homebrew/etc/profile.d/z.sh is present.
+- zoxide: initialized automatically at shell startup.
+- If you prefer the classic z (rupa/z), you can source Homebrew’s /opt/homebrew/etc/profile.d/z.sh in your local.zsh.
 - atuin: initialized automatically at shell startup.
 
-Installed as an Oh My Zsh custom plugin (cloned into $ZSH_CUSTOM/plugins):
-- zsh-interactive-cd
+zsh-interactive-cd is installed into ~/.local/share and sourced automatically (no OMZ required).
 
-Oh My Zsh plugins enabled by default in this config:
-- docker, docker-compose, fzf, dotnet, dotenv, eza, gh, git, jump, z
-Note: These plugins expect the corresponding tools to be installed (except dotenv). Install whichever you use; others will simply be inactive if the tool is missing.
-
-- jump, z: Directory jumping helpers. Install the tools (jump, z) you prefer; unused plugins remain inactive.
+Oh My Zsh plugins enabled by default in this config (via zcomet fallbacks):
+- docker, docker-compose, dotnet, dotenv, gh, git
+Note: fzf integration is provided by fzf-tab (Aloxaf/fzf-tab). eza aliases are provided in this repo. Directory jumping is handled by zoxide.
 
 
 ## Notes

@@ -3,9 +3,8 @@ set -euo pipefail
 
 # mzsh bootstrap installer (macOS)
 # - Clones or updates the repo to ~/.mzsh (or $MZSH_DIR if set)
-# - Ensures Homebrew is installed and on PATH
+# - Ensures Homebrew is installed and on PATH (installs automatically if missing)
 # - Installs all dependencies (e.g., eza, bat, fzf, etc.)
-# - Installs Oh My Zsh non-interactively if missing
 # - Appends source line to ~/.zshrc if missing
 
 REPO_URL="https://github.com/mattias800/mzsh"
@@ -93,15 +92,6 @@ if [ -x "$REPO_DIR/bin/mzsh-install-deps" ]; then
 else
   err "Installer not found at $REPO_DIR/bin/mzsh-install-deps"
   exit 1
-fi
-
-# Install Oh My Zsh if missing (non-interactive)
-if [ ! -d "$HOME/.oh-my-zsh" ]; then
-  log "Installing Oh My Zsh (non-interactive)"
-  RUNZSH=no CHSH=no KEEP_ZSHRC=yes \
-    sh -c "$(/usr/bin/curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-else
-  log "Oh My Zsh already installed"
 fi
 
 # Ensure source line in ~/.zshrc

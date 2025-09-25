@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Migrate from Oh My Zsh to zcomet-based mzsh
+# - Backs up ~/.zshrc
+# - Comments out OMZ lines (export ZSH=, source oh-my-zsh.sh, plugins=(...))
+# - Ensures mzsh init line is present
+# - Advises to restart shell
+
+ZSHRC="$HOME/.zshrc"
+BACKUP="$HOME/.zshrc.bak-$(date +%Y%m%d-%H%M%S)"
+MZSH_INIT="source \"$HOME/.mzsh/init.zsh\""
+
+if [ -f "$ZSHRC" ]; then
+  cp "$ZSHRC" "$BACKUP"
+  echo "[migrate] Backed up ~/.zshrc to $BACKUP"
+fi
+
+# Create temp edited file
+TMP=$(mktemp)
+if [ -f "$ZSHRC" ]; then
+  awk '
+    BEGIN { omz=0 }
+    /(^|\s)export ZSH=|oh-my-zsh\.sh|^plugins=\(/ { print "# [migrated] " $0; next }
+    { print }
+  ' "$ZSHRC" > "$TMP"
+else
+  : > "$TMP"
+fi
+
+# Ensure mzsh init line exists
+if ! grep -Fq "$MZSH_INIT" "$TMP"; then
+  printf "\n%s\n" "$MZSH_INIT" >> "$TMP"
+  echo "[migrate] Added mzsh init line to ~/.zshrc"
+fi
+
+mv "$TMP" "$ZSHRC"
+
+echo "[migrate] Migration complete. Restart your terminal or run: exec zsh"

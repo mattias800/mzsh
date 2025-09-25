@@ -18,11 +18,9 @@ if [ -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 
 fi
 
 # Interactive cd (fzf-powered)
-# Prefer OMZ custom plugin path; fallback to Homebrew path if present
-if [ -n "${ZSH_CUSTOM:-}" ] && [ -f "$ZSH_CUSTOM/plugins/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh" ]; then
-  source "$ZSH_CUSTOM/plugins/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh"
-elif [ -f "$HOME/.oh-my-zsh/custom/plugins/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh" ]; then
-  source "$HOME/.oh-my-zsh/custom/plugins/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh"
+# Prefer vendor path under ~/.local/share; fallback to Homebrew if present
+if [ -f "$HOME/.local/share/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh" ]; then
+  source "$HOME/.local/share/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh"
 elif [ -f /opt/homebrew/share/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh ]; then
   source /opt/homebrew/share/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh
 fi

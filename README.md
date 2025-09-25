@@ -9,10 +9,7 @@ Modular Zsh configuration for macOS. Clone, source `init.zsh` from your local `~
   ```bash
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   ```
-- Oh My Zsh (required for the OMZ plugins used here):
-  ```bash
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-  ```
+- zcomet (plugin manager) is auto-installed by mzsh on first run; no manual action needed.
 - curl (built-in on macOS)
 - git (optional; the installer will install it via Homebrew if missing)
 
@@ -34,6 +31,16 @@ Note: The config is relocatable. `init.zsh` sources all modules relative to its 
 
 3) Restart your terminal.
 
+## Migration from Oh My Zsh
+
+If you previously used Oh My Zsh, migrate on this machine with:
+
+```
+~/.mzsh/bin/migrate-omz-to-zcomet
+```
+
+This comments out OMZ lines in ~/.zshrc and ensures mzsh is sourced. zcomet is installed automatically on first run.
+
 ## Updating
 
 After pulling new changes, you can update dependencies and the repo safely with:
@@ -50,7 +57,7 @@ This command will:
 
 ## Guide
 
-This section lists what this repo adds: aliases, functions, scripts, tools enabled, and OMZ plugins with examples.
+This section lists what this repo adds: aliases, functions, scripts, tools enabled, and plugins (via zcomet) with examples.
 
 Secrets (optional)
 - You can pull secrets from a password manager into an ignored local file.
@@ -176,7 +183,7 @@ Tools (enabled/configured)
   z project         # jump to a frequently used directory matching "project"
   ```
 
-Oh My Zsh plugins (enabled by default)
+Plugins via zcomet (Oh My Zsh plugins loaded without installing OMZ)
 - git: adds many aliases
   ```bash
   gst         # git status
@@ -238,7 +245,7 @@ Oh My Zsh plugins (enabled by default)
 
 ## Structure
 - init.zsh                # Entry point that sources modules below
-- plugins/omz.zsh         # oh-my-zsh bootstrap (no theme)
+- plugins/zcomet.zsh      # zcomet bootstrap and plugin loader
 - plugins/extra.zsh       # autosuggestions and syntax highlighting
 - aliases/docker.zsh      # docker-compose helpers
 - aliases/git.zsh         # git maintenance helpers

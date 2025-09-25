@@ -33,6 +33,7 @@ pkgs=(
   resvg
   imagemagick
   gping
+  bun
 )
 
 # Install packages if missing

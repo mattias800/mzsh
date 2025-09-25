@@ -174,6 +174,15 @@ Tools (enabled/configured)
   ```bash
   yazi              # launch in current dir; q to quit
   ```
+- bun (JavaScript runtime and package manager)
+  ```bash
+  bun --version
+  bun run build
+  bunx create next-app@latest myapp
+  ```
+  Notes:
+  - Installer installs bun via Homebrew.
+  - If you installed bun via the official script, completions are loaded from ~/.bun/_bun and PATH is updated to include ~/.bun/bin.
 - fzf (fuzzy finder)
   ```bash
   fzf --preview 'bat --style=plain --color=always {} | head -200'

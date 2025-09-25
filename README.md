@@ -9,7 +9,7 @@ Modular Zsh configuration for macOS. Clone, source `init.zsh` from your local `~
   ```bash
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   ```
-- zcomet (plugin manager) is auto-installed by mzsh on first run; no manual action needed.
+- zcomet (plugin manager) is auto-installed by mzsh on first run and ensured by the installer; no manual action needed.
 - curl (built-in on macOS)
 - git (optional; the installer will install it via Homebrew if missing)
 
@@ -39,7 +39,11 @@ If you previously used Oh My Zsh, migrate on this machine with:
 ~/.mzsh/bin/migrate-omz-to-zcomet
 ```
 
-This comments out OMZ lines in ~/.zshrc and ensures mzsh is sourced. zcomet is installed automatically on first run.
+This comments out OMZ lines in ~/.zshrc and ensures mzsh is sourced. zcomet is installed automatically and is ensured by the installer.
+
+Optional flags:
+- ~/.mzsh/bin/migrate-omz-to-zcomet --remove-omz  # back up ~/.oh-my-zsh to ~/.oh-my-zsh.bak-<timestamp>
+- ~/.mzsh/bin/migrate-omz-to-zcomet --purge-omz   # delete ~/.oh-my-zsh (dangerous)
 
 ## Updating
 

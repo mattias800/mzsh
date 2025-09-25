@@ -5,7 +5,25 @@ set -euo pipefail
 # - Backs up ~/.zshrc
 # - Comments out OMZ lines (export ZSH=, source oh-my-zsh.sh, plugins=(...))
 # - Ensures mzsh init line is present
+# - Optionally remove or back up ~/.oh-my-zsh
 # - Advises to restart shell
+
+usage() {
+  cat <<EOF
+Usage: $(basename "$0") [--remove-omz | --purge-omz]
+  --remove-omz  Move ~/.oh-my-zsh to ~/.oh-my-zsh.bak-<timestamp>
+  --purge-omz   Delete ~/.oh-my-zsh permanently (dangerous)
+EOF
+}
+
+REMOVE_MODE=""
+if [[ ${1:-} == "--remove-omz" ]]; then
+  REMOVE_MODE=backup
+elif [[ ${1:-} == "--purge-omz" ]]; then
+  REMOVE_MODE=purge
+elif [[ $# -gt 0 ]]; then
+  usage; exit 2
+fi
 
 ZSHRC="$HOME/.zshrc"
 BACKUP="$HOME/.zshrc.bak-$(date +%Y%m%d-%H%M%S)"
@@ -35,5 +53,21 @@ if ! grep -Fq "$MZSH_INIT" "$TMP"; then
 fi
 
 mv "$TMP" "$ZSHRC"
+
+# Handle ~/.oh-my-zsh according to REMOVE_MODE
+OMZ_DIR="$HOME/.oh-my-zsh"
+if [ -d "$OMZ_DIR" ]; then
+  case "$REMOVE_MODE" in
+    backup)
+      TS=$(date +%Y%m%d-%H%M%S)
+      DEST="$HOME/.oh-my-zsh.bak-$TS"
+      mv "$OMZ_DIR" "$DEST"
+      echo "[migrate] Moved $OMZ_DIR to $DEST" ;;
+    purge)
+      rm -rf "$OMZ_DIR"
+      echo "[migrate] Deleted $OMZ_DIR" ;;
+    *) : ;; # leave as-is
+  esac
+fi
 
 echo "[migrate] Migration complete. Restart your terminal or run: exec zsh"

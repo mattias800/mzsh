@@ -2,11 +2,6 @@
 # Manage taps, formulae, and casks here.
 
 # Taps
-# Core/cask taps are typically available by default, included here for clarity
-# and for environments where they might be missing.
-tap "homebrew/core"
-tap "homebrew/cask"
-
 # Support multiple .NET SDK versions installed side-by-side
 # See: https://github.com/isen-ng/homebrew-dotnet-sdk-versions
 tap "isen-ng/dotnet-sdk-versions"

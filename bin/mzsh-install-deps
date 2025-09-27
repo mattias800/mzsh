@@ -60,8 +60,14 @@ if brew tap | grep -q '^homebrew/cask-drivers$'; then
   brew untap homebrew/cask-drivers || true
 fi
 
+# Determine if --no-lock is supported
+NO_LOCK_FLAG=""
+if brew bundle --help 2>/dev/null | grep -q -- "--no-lock"; then
+  NO_LOCK_FLAG="--no-lock"
+fi
+
 # Avoid auto-update during bundle to reduce failure surface on older setups
-HOMEBREW_NO_AUTO_UPDATE=1 brew bundle --no-lock --file "$BREWFILE"
+HOMEBREW_NO_AUTO_UPDATE=1 brew bundle install ${NO_LOCK_FLAG} --file "$BREWFILE"
 
 # Install zsh-interactive-cd into vendor path (no OMZ required)
 VENDOR_DIR="$HOME/.local/share/zsh-interactive-cd"

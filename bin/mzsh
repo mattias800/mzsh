@@ -7,6 +7,10 @@ case "$cmd" in
     shift
     exec "$HOME/.mzsh/bin/mzsh-secrets" "$@"
     ;;
+  ssh)
+    shift
+    exec "$HOME/.mzsh/bin/mzsh-ssh" "$@"
+    ;
   help|-h|--help|"")
     cat <<'EOF'
 Usage: mzsh <command> [args]

@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+Usage: mzsh ssh <command>
+
+Commands:
+  add-keys           Add all SSH private keys found under ~/.ssh to the Apple Keychain
+
+Examples:
+  mzsh ssh add-keys
+EOF
+}
+
+cmd=${1:-}
+case "$cmd" in
+  add-keys)
+    SSH_DIR=${SSH_DIR:-"$HOME/.ssh"}
+    if [ ! -d "$SSH_DIR" ]; then
+      echo "[mzsh] SSH directory not found: $SSH_DIR" >&2
+      exit 1
+    fi
+
+    # Determine Apple keychain flag support
+    add_flag=""
+    if ssh-add -h 2>&1 | grep -q -- "--apple-use-keychain"; then
+      add_flag="--apple-use-keychain"
+    else
+      # macOS older flag; harmless elsewhere (will error out and we fallback without it)
+      if ssh-add -K 2>&1 | grep -qi "usage"; then
+        add_flag="-K"
+      fi
+    fi
+
+    # Find candidate private keys (skip public keys and common non-key files)
+    mapfile -t keys < <(find "$SSH_DIR" -type f \
+      ! -name "*.pub" \
+      ! -name "known_hosts*" \
+      ! -name "config" \
+      ! -name "authorized_keys*" \
+      ! -name "*.crt" \
+      ! -name "*.csr" \
+      ! -name "*.pem.pub" \
+      -maxdepth 1 2>/dev/null | sort)
+
+    if [ ${#keys[@]} -eq 0 ]; then
+      echo "[mzsh] No candidate private keys found in $SSH_DIR"
+      exit 0
+    fi
+
+    echo "[mzsh] Adding SSH keys from $SSH_DIR to Keychain (you may be prompted for passphrases)"
+    added=0
+    failed=0
+    for k in "${keys[@]}"; do
+      # Try with Apple keychain flag first if available, otherwise plain ssh-add
+      if [ -n "$add_flag" ]; then
+        if ssh-add $add_flag "$k"; then
+          ((added++))
+          continue
+        fi
+        # Fallback to plain ssh-add if the flag wasn't accepted for this key
+        if ssh-add "$k"; then
+          ((added++))
+        else
+          ((failed++))
+          echo "[mzsh] Failed to add: $k" >&2
+        fi
+      else
+        if ssh-add "$k"; then
+          ((added++))
+        else
+          ((failed++))
+          echo "[mzsh] Failed to add: $k" >&2
+        fi
+      fi
+    done
+    echo "[mzsh] Done. Added: $added  Failed: $failed"
+    ;;
+  help|-h|--help|"")
+    usage
+    ;;
+  *)
+    echo "mzsh ssh: unknown command: $cmd" >&2
+    usage
+    exit 1
+    ;;
+ esac

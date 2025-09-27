@@ -39,3 +39,13 @@ brew "oven-sh/bun/bun"
 # Meta-packages for .NET SDKs; install multiple versions as needed
 cask "dotnet-sdk8"
 cask "dotnet-sdk9"
+
+# Quick Look plugins
+cask "qlvideo"
+cask "quicklook-json"
+cask "syntax-highlight"
+cask "webpquicklook"
+cask "qlmarkdown"
+cask "qlimagesize"
+cask "suspicious-package"
+cask "quicklook-csv"

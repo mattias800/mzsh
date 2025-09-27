@@ -55,7 +55,7 @@ ensure_brew() {
     return 0
   fi
   log "Homebrew not found; installing (non-interactive)"
-  NONINTERACTIVE=1 /bin/bash -c "$(/usr/bin/curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  NONINTERACTIVE=1 /bin/bash -c "$(/usr/bin/curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || true
 
   # Detect brew binary path (Apple Silicon vs Intel)
   local brew_bin=""

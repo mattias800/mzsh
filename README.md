@@ -9,7 +9,7 @@ Modular Zsh configuration for macOS. Clone, source `init.zsh` from your local `~
   ```bash
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   ```
-- zcomet (plugin manager) is auto-installed by mzsh on first run and ensured by the installer; no manual action needed.
+- Antigen (plugin manager) is installed via the Brewfile and loaded by mzsh.
 - curl (built-in on macOS)
 - git (optional; the installer will install it via Homebrew if missing)
 
@@ -18,6 +18,8 @@ Modular Zsh configuration for macOS. Clone, source `init.zsh` from your local `~
 ```bash
 curl -fsSL https://raw.githubusercontent.com/mattias800/mzsh/main/bin/install.sh | bash
 ```
+
+During installation, if an existing Oh My Zsh is detected, the installer will ask if you want to remove it. mzsh uses Antigen instead of Oh My Zsh, so OMZ is not required. If you agree, the official OMZ uninstaller is invoked.
 
 Note: The config is relocatable. `init.zsh` sources all modules relative to its own path, so you can clone it anywhere; just adjust the source line accordingly. PATH for tools is expected to be handled by each tool’s installer.
 
@@ -31,19 +33,6 @@ Note: The config is relocatable. `init.zsh` sources all modules relative to its 
 
 3) Restart your terminal.
 
-## Migration from Oh My Zsh
-
-If you previously used Oh My Zsh, migrate on this machine with:
-
-```
-~/.mzsh/bin/migrate-omz-to-zcomet
-```
-
-This comments out OMZ lines in ~/.zshrc and ensures mzsh is sourced. zcomet is installed automatically and is ensured by the installer.
-
-Optional flags:
-- ~/.mzsh/bin/migrate-omz-to-zcomet --remove-omz  # back up ~/.oh-my-zsh to ~/.oh-my-zsh.bak-<timestamp>
-- ~/.mzsh/bin/migrate-omz-to-zcomet --purge-omz   # delete ~/.oh-my-zsh (dangerous)
 
 ## Updating
 
@@ -197,7 +186,7 @@ Tools (enabled/configured)
   zi -              # jump to previous directory
   ```
 
-Plugins via zcomet (Oh My Zsh plugins loaded without installing OMZ where needed)
+Plugins via Antigen (Oh My Zsh plugins loaded via Antigen; OMZ itself is not installed)
 - git: adds many aliases
   ```bash
   gst         # git status
@@ -252,7 +241,7 @@ Plugins via zcomet (Oh My Zsh plugins loaded without installing OMZ where needed
 
 ## Structure
 - init.zsh                # Entry point that sources modules below
-- plugins/zcomet.zsh      # zcomet bootstrap and plugin loader
+- plugins/antigen.zsh     # Antigen bootstrap and plugin loader
 - plugins/extra.zsh       # autosuggestions and syntax highlighting
 - aliases/docker.zsh      # docker-compose helpers
 - aliases/git.zsh         # git maintenance helpers
@@ -281,7 +270,7 @@ Notes:
 
 zsh-interactive-cd is installed into ~/.local/share and sourced automatically (no OMZ required).
 
-Oh My Zsh plugins enabled by default in this config (via zcomet fallbacks):
+Oh My Zsh plugins enabled by default in this config (loaded via Antigen as individual plugin paths):
 - docker, docker-compose, dotnet, dotenv, gh, git
 Note: fzf integration is provided by fzf-tab (Aloxaf/fzf-tab). eza aliases are provided in this repo. Directory jumping is handled by zoxide.
 

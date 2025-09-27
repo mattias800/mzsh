@@ -3,8 +3,8 @@
 # Resolve base directory of this file (zsh-specific)
 BASE_DIR=${0:A:h}
 
-# 1) zcomet plugin manager
-[ -f "$BASE_DIR/plugins/zcomet.zsh" ] && source "$BASE_DIR/plugins/zcomet.zsh"
+# 1) Antigen plugin manager
+[ -f "$BASE_DIR/plugins/antigen.zsh" ] && source "$BASE_DIR/plugins/antigen.zsh"
 
 # 2) Tools
 for f in "$BASE_DIR/tools"/*.zsh; do [ -f "$f" ] && source "$f"; done

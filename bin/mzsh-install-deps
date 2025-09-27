@@ -51,21 +51,6 @@ fi
 echo "[mzsh] Installing/updating packages from $BREWFILE"
 brew bundle --no-lock --file "$BREWFILE"
 
-# Ensure zcomet (plugin manager) is installed or updated
-ZCOMET_HOME="${ZCOMET_HOME:-$HOME/.zcomet}"
-if [ -d "$ZCOMET_HOME/.git" ]; then
-  echo "[mzsh] Updating zcomet in $ZCOMET_HOME"
-  git -C "$ZCOMET_HOME" fetch --prune --quiet || true
-  git -C "$ZCOMET_HOME" pull --ff-only || true
-elif [ -d "$ZCOMET_HOME" ] && [ -f "$ZCOMET_HOME/zcomet.zsh" ]; then
-  echo "[mzsh] zcomet found at $ZCOMET_HOME"
-else
-  echo "[mzsh] Installing zcomet to $ZCOMET_HOME"
-  rm -rf "$ZCOMET_HOME" 2>/dev/null || true
-  mkdir -p "$ZCOMET_HOME"
-  git clone --depth=1 https://github.com/agkozak/zcomet "$ZCOMET_HOME"
-fi
-
 # Install zsh-interactive-cd into vendor path (no OMZ required)
 VENDOR_DIR="$HOME/.local/share/zsh-interactive-cd"
 if [ -d "$VENDOR_DIR/.git" ]; then

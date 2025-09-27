@@ -23,6 +23,7 @@ brew "atuin"
 brew "z"
 brew "git-delta"
 brew "htop"
+brew "btop"
 brew "pstree"
 brew "jq"
 brew "ffmpeg"
@@ -35,6 +36,7 @@ brew "resvg"
 brew "imagemagick"
 brew "gping"
 brew "bun"
+brew "antigen"
 
 # Casks
 # Meta-packages for .NET SDKs; install multiple versions as needed

@@ -39,16 +39,24 @@ if [ -d /opt/homebrew/share/zsh/site-functions ] || [ -d /usr/local/share/zsh/si
   fpath+=(/opt/homebrew/share/zsh/site-functions /usr/local/share/zsh/site-functions)
 fi
 
-# Theme
-antigen theme simple
+# Theme (explicit repo to avoid resolution ambiguity)
+if [ -n "$MZSH_ANTIGEN_DEBUG" ]; then
+  echo "[mzsh][antigen] theming: ohmyzsh/ohmyzsh simple"
+fi
+if ! antigen theme ohmyzsh/ohmyzsh simple; then
+  echo "[mzsh][antigen] theme load failed: ohmyzsh/ohmyzsh simple" >&2
+fi
 
 # Bundle and apply
 if [ -n "$MZSH_ANTIGEN_DEBUG" ]; then
   for _p in "${_antigen_plugins[@]}"; do
     echo "[mzsh][antigen] bundling: $_p"
-    antigen bundle $_p
-    antigen apply
-    echo "[mzsh][antigen] loaded: $_p"
+    if antigen bundle $_p; then
+      antigen apply
+      echo "[mzsh][antigen] loaded: $_p"
+    else
+      echo "[mzsh][antigen] failed: $_p" >&2
+    fi
   done
 else
   for _p in "${_antigen_plugins[@]}"; do

@@ -85,6 +85,23 @@ ensure_brew() {
 
 ensure_brew
 
+# Work around stale/removed taps that can break first-run brew update
+brew_sanitize_taps() {
+  # Remove deprecated cask-drivers tap if present (old Homebrew setups)
+  if brew tap | grep -q '^homebrew/homebrew-cask-drivers$'; then
+    log "Untapping deprecated tap homebrew/homebrew-cask-drivers"
+    brew untap homebrew/homebrew-cask-drivers || true
+  fi
+  if brew tap | grep -q '^homebrew/cask-drivers$'; then
+    log "Untapping deprecated tap homebrew/cask-drivers"
+    brew untap homebrew/cask-drivers || true
+  fi
+}
+
+brew_sanitize_taps || true
+# Try a quiet update to settle taps; ignore failures (brew bundle will proceed)
+brew update --force --quiet || true
+
 # Install/update dependencies (includes eza)
 if [ -x "$REPO_DIR/bin/mzsh-install-deps" ]; then
   log "Installing/updating dependencies"

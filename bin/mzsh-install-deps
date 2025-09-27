@@ -49,7 +49,19 @@ if [ ! -f "$BREWFILE" ]; then
 fi
 
 echo "[mzsh] Installing/updating packages from $BREWFILE"
-brew bundle --no-lock --file "$BREWFILE"
+
+# Work around stale/removed taps that can break brew operations
+if brew tap | grep -q '^homebrew/homebrew-cask-drivers$'; then
+  echo "[mzsh] Untapping deprecated tap homebrew/homebrew-cask-drivers"
+  brew untap homebrew/homebrew-cask-drivers || true
+fi
+if brew tap | grep -q '^homebrew/cask-drivers$'; then
+  echo "[mzsh] Untapping deprecated tap homebrew/cask-drivers"
+  brew untap homebrew/cask-drivers || true
+fi
+
+# Avoid auto-update during bundle to reduce failure surface on older setups
+HOMEBREW_NO_AUTO_UPDATE=1 brew bundle --no-lock --file "$BREWFILE"
 
 # Install zsh-interactive-cd into vendor path (no OMZ required)
 VENDOR_DIR="$HOME/.local/share/zsh-interactive-cd"

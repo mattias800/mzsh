@@ -6,6 +6,9 @@
 # See: https://github.com/isen-ng/homebrew-dotnet-sdk-versions
 tap "isen-ng/dotnet-sdk-versions"
 
+# Bun (official tap for compatibility across Homebrew versions)
+tap "oven-sh/bun"
+
 # Formulae
 brew "git"
 brew "zsh-autosuggestions"
@@ -30,8 +33,7 @@ brew "zoxide"
 brew "resvg"
 brew "imagemagick"
 brew "gping"
-brew "bun"
-brew "antigen"
+brew "oven-sh/bun/bun"
 
 # Casks
 # Meta-packages for .NET SDKs; install multiple versions as needed

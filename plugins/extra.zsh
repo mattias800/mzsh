@@ -1,8 +1,6 @@
-# Autosuggestions and syntax highlighting (Homebrew paths assumed)
-# zsh-autosuggestions must be sourced before zsh-syntax-highlighting.
-if [ -f /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
-  source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-fi
+# Autosuggestions and syntax highlighting
+# Antigen now loads zsh-users/zsh-autosuggestions and zsh-users/zsh-syntax-highlighting.
+# Keep style tweaks here.
 
 # Disable underline highlight style if available
 if (( ${+ZSH_HIGHLIGHT_STYLES} )); then
@@ -12,10 +10,6 @@ else
 fi
 ZSH_HIGHLIGHT_STYLES[path]=none
 ZSH_HIGHLIGHT_STYLES[path_prefix]=none
-
-if [ -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
-  source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-fi
 
 # Interactive cd (fzf-powered)
 # Prefer vendor path under ~/.local/share; fallback to Homebrew if present

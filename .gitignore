@@ -14,3 +14,6 @@ secrets.zsh
 
 # macOS fluff
 .DS_Store
+
+# Zsh compiled files
+*.zwc

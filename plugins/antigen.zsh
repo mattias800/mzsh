@@ -66,9 +66,9 @@ if [ -n "$MZSH_ANTIGEN_DEBUG" ]; then
     fi
   done
 else
+  # Use sequential apply by default to surface exact failing plugin and avoid batch-apply quirks
   for _p in "${_antigen_plugins[@]}"; do
     antigen bundle $_p
   done
-  # Apply changes (initializes compinit)
   antigen apply
 fi

@@ -20,19 +20,19 @@ antigen use oh-my-zsh
 zstyle :omz:plugins:ssh-agent ssh-add-args --apple-load-keychain
 zstyle :omz:plugins:ssh-agent quiet yes
 
-# OMZ plugins (explicit subpaths to avoid resolution issues)
-antigen bundle ohmyzsh/ohmyzsh plugins/git
-antigen bundle ohmyzsh/ohmyzsh plugins/z
-antigen bundle ohmyzsh/ohmyzsh plugins/fzf
-antigen bundle ohmyzsh/ohmyzsh plugins/extract
-antigen bundle ohmyzsh/ohmyzsh plugins/completions
-antigen bundle ohmyzsh/ohmyzsh plugins/yarn
-antigen bundle ohmyzsh/ohmyzsh plugins/ssh-agent
-
-# External/community plugins
-antigen bundle zsh-users/zsh-autosuggestions
-antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle zsh-users/zsh-completions
+# Define plugin list
+_antigen_plugins=(
+  "ohmyzsh/ohmyzsh plugins/git"
+  "ohmyzsh/ohmyzsh plugins/z"
+  "ohmyzsh/ohmyzsh plugins/fzf"
+  "ohmyzsh/ohmyzsh plugins/extract"
+  "ohmyzsh/ohmyzsh plugins/completions"
+  "ohmyzsh/ohmyzsh plugins/yarn"
+  "ohmyzsh/ohmyzsh plugins/ssh-agent"
+  "zsh-users/zsh-autosuggestions"
+  "zsh-users/zsh-syntax-highlighting"
+  "zsh-users/zsh-completions"
+)
 
 # gibo completion (via Homebrew-installed completion if present)
 if [ -d /opt/homebrew/share/zsh/site-functions ] || [ -d /usr/local/share/zsh/site-functions ]; then
@@ -42,5 +42,18 @@ fi
 # Theme
 antigen theme simple
 
-# Apply changes (initializes compinit)
-antigen apply
+# Bundle and apply
+if [ -n "$MZSH_ANTIGEN_DEBUG" ]; then
+  for _p in "${_antigen_plugins[@]}"; do
+    echo "[mzsh][antigen] bundling: $_p"
+    antigen bundle $_p
+    antigen apply
+    echo "[mzsh][antigen] loaded: $_p"
+  done
+else
+  for _p in "${_antigen_plugins[@]}"; do
+    antigen bundle $_p
+  done
+  # Apply changes (initializes compinit)
+  antigen apply
+fi

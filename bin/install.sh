@@ -51,14 +51,35 @@ fi
 
 # Ensure Homebrew exists and is on PATH
 ensure_brew() {
+  # Detect Homebrew even if it's not on PATH yet
+  local brew_bin=""
   if command -v brew >/dev/null 2>&1; then
+    brew_bin="$(command -v brew)"
+  elif [ -x /opt/homebrew/bin/brew ]; then
+    brew_bin=/opt/homebrew/bin/brew
+  elif [ -x /usr/local/bin/brew ]; then
+    brew_bin=/usr/local/bin/brew
+  fi
+
+  # If we found brew already installed, initialize environment and persist, then return
+  if [ -n "$brew_bin" ]; then
+    # shellenv for current session
+    eval "$(${brew_bin} shellenv)" || true
+    # Persist shellenv in ~/.zprofile if not already present
+    local ZPROFILE="$HOME/.zprofile"
+    local SHELLENV_LINE="eval \"\$(${brew_bin} shellenv)\""
+    if [ ! -f "$ZPROFILE" ] || ! grep -Fq "$SHELLENV_LINE" "$ZPROFILE"; then
+      log "Appending Homebrew shellenv to ~/.zprofile"
+      printf "\n%s\n" "$SHELLENV_LINE" >> "$ZPROFILE"
+    fi
     return 0
   fi
+
+  # Otherwise install Homebrew non-interactively
   log "Homebrew not found; installing (non-interactive)"
   NONINTERACTIVE=1 /bin/bash -c "$(/usr/bin/curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || true
 
-  # Detect brew binary path (Apple Silicon vs Intel)
-  local brew_bin=""
+  # Re-detect brew after install
   if [ -x /opt/homebrew/bin/brew ]; then
     brew_bin=/opt/homebrew/bin/brew
   elif [ -x /usr/local/bin/brew ]; then
@@ -67,12 +88,12 @@ ensure_brew() {
     brew_bin="$(command -v brew || true)"
   fi
   if [ -z "${brew_bin}" ]; then
-    err "Homebrew installation appears to have failed (brew not found on PATH)."
+    err "Homebrew installation appears to have failed (brew not found)."
     exit 1
   fi
 
   # shellenv for current session
-  eval "$(${brew_bin} shellenv)"
+  eval "$(${brew_bin} shellenv)" || true
 
   # Persist shellenv in ~/.zprofile if not already present
   local ZPROFILE="$HOME/.zprofile"

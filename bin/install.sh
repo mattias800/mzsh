@@ -137,7 +137,14 @@ if [ -d "$HOME/.oh-my-zsh" ]; then
   echo
   echo "[mzsh] Detected an existing Oh My Zsh installation at ~/.oh-my-zsh."
   echo "[mzsh] mzsh uses Antigen to manage plugins and does not require Oh My Zsh."
-  read -r -p "[mzsh] Do you want to remove Oh My Zsh now? [y/N]: " _mzsh_resp || _mzsh_resp=""
+  if [ -r /dev/tty ]; then
+    read -r -p "[mzsh] Do you want to remove Oh My Zsh now? [y/N]: " _mzsh_resp </dev/tty || _mzsh_resp=""
+  else
+    echo "[mzsh] Non-interactive install detected (no /dev/tty). Skipping OMZ removal prompt."
+    echo "       To remove OMZ later, run:"
+    echo "       ZSH=\"$HOME/.oh-my-zsh\" sh \"$HOME/.oh-my-zsh/tools/uninstall.sh\""
+    _mzsh_resp=""
+  fi
   case "${_mzsh_resp}" in
     [yY]|[yY][eE][sS])
       if [ -x "$HOME/.oh-my-zsh/tools/uninstall.sh" ]; then

@@ -14,6 +14,8 @@ else
 fi
 
 # Use the Oh My Zsh framework (fetched by Antigen; does not require ~/.oh-my-zsh)
+export ZSH_DISABLE_COMPFIX="true"
+export ZSH_COMPDUMP="${ZSH_COMPDUMP:-$HOME/.zcompdump}"
 antigen use oh-my-zsh
 
 # ssh-agent plugin configuration (set before loading the plugin)
@@ -39,12 +41,17 @@ if [ -d /opt/homebrew/share/zsh/site-functions ] || [ -d /usr/local/share/zsh/si
   fpath+=(/opt/homebrew/share/zsh/site-functions /usr/local/share/zsh/site-functions)
 fi
 
-# Theme (explicit repo to avoid resolution ambiguity)
+# Theme
 if [ -n "$MZSH_ANTIGEN_DEBUG" ]; then
-  echo "[mzsh][antigen] theming: ohmyzsh/ohmyzsh simple"
-fi
-if ! antigen theme ohmyzsh/ohmyzsh simple; then
-  echo "[mzsh][antigen] theme load failed: ohmyzsh/ohmyzsh simple" >&2
+  echo "[mzsh][antigen] theming: simple"
+  if antigen theme simple; then
+    antigen apply
+    echo "[mzsh][antigen] theme loaded: simple"
+  else
+    echo "[mzsh][antigen] theme load failed: simple" >&2
+  fi
+else
+  antigen theme simple
 fi
 
 # Bundle and apply

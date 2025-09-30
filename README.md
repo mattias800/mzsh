@@ -2,16 +2,9 @@
 
 Modular Zsh configuration for macOS. Clone, source `init.zsh` from your local `~/.zshrc`, and you're set.
 
-## Prerequisites
+## Requirements
 
-- macOS with Zsh (5.8+). macOS includes Zsh by default.
-- Homebrew: the installer will automatically install and configure Homebrew if it is missing (non-interactive). Manual install is optional:
-  ```bash
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  ```
-- Antigen (plugin manager) is installed via the Brewfile and loaded by mzsh.
-- curl (built-in on macOS)
-- git (optional; the installer will install it via Homebrew if missing)
+- macOS. No manual prerequisites — the installer will install Homebrew, Git, Antigen, and other dependencies automatically.
 
 ## Quick start
 

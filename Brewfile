@@ -34,6 +34,7 @@ brew "zoxide"
 brew "resvg"
 brew "imagemagick"
 brew "gping"
+brew "gawk"
 brew "oven-sh/bun/bun"
 
 # Casks

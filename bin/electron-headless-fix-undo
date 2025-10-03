@@ -1,0 +1,36 @@
+#!/bin/zsh
+set -euo pipefail
+
+# Undo the temporary workaround: remove LaunchAgent and unset CHROME_HEADLESS
+# Reference: https://gist.github.com/tkafka/e3eb63a5ec448e9be6701bfd1f1b1e58#temporary-workaround
+
+agent_plist="${HOME}/Library/LaunchAgents/environment.fix-electron-resource-hog-bug.plist"
+label="${${agent_plist:t:r}}"
+
+echo "[electron-headless-fix-undo] Booting out LaunchAgent if loaded: ${label}..."
+if launchctl print "gui/${UID}/${label}" >/dev/null 2>&1; then
+  launchctl bootout "gui/${UID}/${label}" || true
+else
+  echo "[electron-headless-fix-undo] LaunchAgent not loaded."
+fi
+
+echo "[electron-headless-fix-undo] Removing plist if it exists: ${agent_plist}..."
+if [[ -f "${agent_plist}" ]]; then
+  rm -f "${agent_plist}"
+else
+  echo "[electron-headless-fix-undo] No plist file found to remove."
+fi
+
+echo "[electron-headless-fix-undo] Unsetting CHROME_HEADLESS environment variable..."
+if [[ "$(launchctl getenv CHROME_HEADLESS || true)" != "" ]]; then
+  launchctl unsetenv CHROME_HEADLESS || true
+fi
+
+echo "[electron-headless-fix-undo] Verifying CHROME_HEADLESS..."
+if launchctl getenv CHROME_HEADLESS >/dev/null 2>&1; then
+  echo "Warning: CHROME_HEADLESS still set: $(launchctl getenv CHROME_HEADLESS)"
+else
+  echo "CHROME_HEADLESS not set"
+fi
+
+echo "[electron-headless-fix-undo] Done."

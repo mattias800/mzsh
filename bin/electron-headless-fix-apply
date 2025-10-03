@@ -1,0 +1,57 @@
+#!/bin/zsh
+set -euo pipefail
+
+# Temporary workaround for macOS Electron slowdown by setting CHROME_HEADLESS=1 via a LaunchAgent
+# Reference: https://gist.github.com/tkafka/e3eb63a5ec448e9be6701bfd1f1b1e58#temporary-workaround
+
+echo "[electron-headless-fix-apply] Ensuring LaunchAgents directory exists..."
+mkdir -p "${HOME}/Library/LaunchAgents"
+
+agent_plist="${HOME}/Library/LaunchAgents/environment.fix-electron-resource-hog-bug.plist"
+label="${${agent_plist:t:r}}"
+
+echo "[electron-headless-fix-apply] Writing ${agent_plist}..."
+/bin/cat <<EOT > "${agent_plist}"
+<!--
+ https://gist.github.com/tkafka/e3eb63a5ec448e9be6701bfd1f1b1e58#temporary-workaround
+ To Remove:
+ launchctl bootout gui/\${UID}/\${agent_plist:t:r} && rm \${agent_plist}
+-->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+        <key>Label</key>
+        <string>${label}</string>
+        <key>ProgramArguments</key>
+        <array>
+                <string>/bin/launchctl</string>
+                <string>setenv</string>
+                <string>CHROME_HEADLESS</string>
+                <string>1</string>
+        </array>
+        <key>RunAtLoad</key>
+        <true/>
+</dict>
+</plist>
+EOT
+
+echo "[electron-headless-fix-apply] Bootstrapping LaunchAgent ${label}..."
+# If already loaded, boot it out first to avoid 'service already loaded'
+if launchctl print "gui/${UID}/${label}" >/dev/null 2>&1; then
+  launchctl bootout "gui/${UID}/${label}" || true
+fi
+launchctl bootstrap "gui/${UID}" "${agent_plist}"
+
+echo "[electron-headless-fix-apply] Verifying CHROME_HEADLESS..."
+val="$(launchctl getenv CHROME_HEADLESS || true)"
+if [[ "${val:-}" == "1" ]]; then
+  echo "CHROME_HEADLESS=1"
+else
+  echo "Warning: CHROME_HEADLESS not set to 1 (got: ${val:-empty})."
+fi
+
+# Optional: print service info
+# launchctl print "gui/${UID}/environment.fix-electron-resource-hog-bug" | head -n 50
+
+echo "[electron-headless-fix-apply] Done."

@@ -162,14 +162,47 @@ if [ -d "$HOME/.oh-my-zsh" ]; then
   esac
 fi
 
-# Ensure source line in ~/.zshrc
+# Helper: append a line to a file if not already present (idempotent)
+add_unique_line() {
+  # $1=file, $2=literal line (no trailing newline required)
+  local _file="$1" _line="$2"
+  [ -z "${_file}" ] && return 1
+  mkdir -p "$(dirname -- "${_file}")"
+  touch "${_file}"
+  if ! grep -Fq "${_line}" "${_file}" 2>/dev/null; then
+    printf "\n%s\n" "${_line}" >> "${_file}"
+  fi
+}
+
+# Ensure source line in ~/.zshrc (load mzsh on interactive shells)
 SRC_LINE="source \"$REPO_DIR/init.zsh\""
 ZSHRC="$HOME/.zshrc"
 if [ -f "$ZSHRC" ] && grep -qF "$SRC_LINE" "$ZSHRC"; then
   log "Source line already present in ~/.zshrc"
 else
   log "Adding source line to ~/.zshrc"
-  printf "\n%s\n" "$SRC_LINE" >> "$ZSHRC"
+  add_unique_line "$ZSHRC" "$SRC_LINE"
+fi
+
+# Ensure ~/.mzsh/bin is on PATH for login shells (zprofile) and as a fallback for interactive shells (zshrc)
+# This makes mzsh-update available immediately after installation.
+MZSH_BIN_LINE='case ":$PATH:" in *":$HOME/.mzsh/bin:"*) ;; *) export PATH="$HOME/.mzsh/bin:$PATH" ;; esac'
+ZPROFILE="$HOME/.zprofile"
+add_unique_line "$ZPROFILE" "$MZSH_BIN_LINE"
+# Add to ~/.zshrc as well in case the user launches non-login shells
+add_unique_line "$ZSHRC" "$MZSH_BIN_LINE"
+
+# Self-check: ensure mzsh-update is available now
+if ! command -v mzsh-update >/dev/null 2>&1; then
+  case ":$PATH:" in
+    *":$HOME/.mzsh/bin:"*) ;;
+    *) export PATH="$HOME/.mzsh/bin:$PATH" ;;
+  esac
+fi
+if command -v mzsh-update >/dev/null 2>&1; then
+  log "Verified: mzsh-update is available at $(command -v mzsh-update)"
+else
+  err "mzsh-update is not yet on PATH. Open a new terminal or run: export PATH=\"$HOME/.mzsh/bin:$PATH\""
 fi
 
 log "Done. Restart your terminal or run: exec zsh"

@@ -14,7 +14,9 @@ curl -fsSL https://raw.githubusercontent.com/mattias800/mzsh/main/bin/install.sh
 
 During installation, if an existing Oh My Zsh is detected, the installer will ask if you want to remove it. mzsh uses Antigen instead of Oh My Zsh, so OMZ is not required. If you agree, the official OMZ uninstaller is invoked.
 
-Note: The config is relocatable. `init.zsh` sources all modules relative to its own path, so you can clone it anywhere; just adjust the source line accordingly. PATH for tools is expected to be handled by each tool’s installer.
+Note: The config is relocatable. `init.zsh` sources all modules relative to its own path, so you can clone it anywhere; just adjust the source line accordingly.
+
+After installation, `~/.mzsh/bin` is added to your PATH automatically (login shells via `~/.zprofile`, non-login shells via `~/.zshrc`), and `init.zsh` also ensures the bin directory is present at runtime. As a result, `mzsh-update` is available immediately.
 
 ## Manual installation
 

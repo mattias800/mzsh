@@ -3,6 +3,12 @@
 # Resolve base directory of this file (zsh-specific)
 BASE_DIR=${0:A:h}
 
+# Ensure mzsh bin directory is on PATH (relocatable)
+case ":$PATH:" in
+  *":$BASE_DIR/bin:"*) ;;
+  *) export PATH="$BASE_DIR/bin:$PATH" ;;
+ esac
+
 # 1) Antigen plugin manager
 [ -f "$BASE_DIR/plugins/antigen.zsh" ] && source "$BASE_DIR/plugins/antigen.zsh"
 

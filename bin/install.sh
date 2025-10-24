@@ -185,24 +185,24 @@ else
 fi
 
 # Ensure ~/.mzsh/bin is on PATH for login shells (zprofile) and as a fallback for interactive shells (zshrc)
-# This makes mzsh-update available immediately after installation.
+# This makes mzsh available immediately after installation.
 MZSH_BIN_LINE='case ":$PATH:" in *":$HOME/.mzsh/bin:"*) ;; *) export PATH="$HOME/.mzsh/bin:$PATH" ;; esac'
 ZPROFILE="$HOME/.zprofile"
 add_unique_line "$ZPROFILE" "$MZSH_BIN_LINE"
 # Add to ~/.zshrc as well in case the user launches non-login shells
 add_unique_line "$ZSHRC" "$MZSH_BIN_LINE"
 
-# Self-check: ensure mzsh-update is available now
-if ! command -v mzsh-update >/dev/null 2>&1; then
+# Self-check: ensure mzsh is available now
+if ! command -v mzsh >/dev/null 2>&1; then
   case ":$PATH:" in
     *":$HOME/.mzsh/bin:"*) ;;
     *) export PATH="$HOME/.mzsh/bin:$PATH" ;;
   esac
 fi
-if command -v mzsh-update >/dev/null 2>&1; then
-  log "Verified: mzsh-update is available at $(command -v mzsh-update)"
+if command -v mzsh >/dev/null 2>&1; then
+  log "Verified: mzsh is available at $(command -v mzsh)"
 else
-  err "mzsh-update is not yet on PATH. Open a new terminal or run: export PATH=\"$HOME/.mzsh/bin:$PATH\""
+  err "mzsh is not yet on PATH. Open a new terminal or run: export PATH=\"$HOME/.mzsh/bin:$PATH\""
 fi
 
 log "Done. Restart your terminal or run: exec zsh"

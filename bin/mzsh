@@ -3,6 +3,14 @@ set -euo pipefail
 
 cmd=${1:-}
 case "$cmd" in
+  update)
+    shift
+    exec "$HOME/.mzsh/bin/mzsh-update" "$@"
+    ;;
+  install-deps)
+    shift
+    exec "$HOME/.mzsh/bin/mzsh-install-deps" "$@"
+    ;;
   secrets)
     shift
     exec "$HOME/.mzsh/bin/mzsh-secrets" "$@"
@@ -11,21 +19,39 @@ case "$cmd" in
     shift
     exec "$HOME/.mzsh/bin/mzsh-ssh" "$@"
     ;;
+  electron-headless-fix-apply)
+    shift
+    exec "$HOME/.mzsh/bin/electron-headless-fix-apply" "$@"
+    ;;
+  electron-headless-fix-undo)
+    shift
+    exec "$HOME/.mzsh/bin/electron-headless-fix-undo" "$@"
+    ;;
   help|-h|--help|"")
     cat <<'EOF'
 Usage: mzsh <command> [args]
 
 Commands:
+  update                                        # update mzsh and dependencies
+  install-deps                                  # install/update dependencies from Brewfile
+  
   secrets pull [--manifest PATH] [--provider PROVIDER] [--dry-run]
   secrets sample [--manifest PATH]
-  secrets install [op|bw|lpass|all]     # install required CLI(s) via Homebrew
-  secrets doctor                        # check setup and provide guidance
+  secrets install [op|bw|lpass|all]            # install required CLI(s) via Homebrew
+  secrets doctor                                # check setup and provide guidance
+  
+  ssh [args]                                    # SSH command wrapper
+  
+  electron-headless-fix-apply                   # apply Electron CHROME_HEADLESS=1 workaround
+  electron-headless-fix-undo                    # remove Electron workaround
 
 Examples:
+  mzsh update
   mzsh secrets sample                           # write example manifest if missing
   mzsh secrets pull                             # pull using default manifest
   mzsh secrets pull --manifest ~/.config/mzsh/secrets.json
   mzsh secrets pull --provider op               # force provider for all entries
+  mzsh electron-headless-fix-apply              # fix macOS Electron slowdown
 
 Secrets providers supported:
   op        1Password CLI (op)

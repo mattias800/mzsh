@@ -42,11 +42,15 @@ brew "oven-sh/bun/bun"
 cask "dotnet-sdk8"
 cask "dotnet-sdk9"
 
+# Communication apps
+cask "slack"
+cask "discord"
+cask "warp"
+
 # Quick Look plugins
 cask "qlvideo"
 cask "quicklook-json"
-cask "syntax-highlight"
+cask "syntax-highlight"          # syntax highlighting for source code and text files
 cask "webpquicklook"
-cask "qlmarkdown"
 cask "suspicious-package"
 cask "quicklook-csv"

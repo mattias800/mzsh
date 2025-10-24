@@ -36,6 +36,7 @@ brew "imagemagick"
 brew "gping"
 brew "gawk"
 brew "oven-sh/bun/bun"
+brew "magic-wormhole"
 
 # Casks
 # Meta-packages for .NET SDKs; install multiple versions as needed

@@ -37,6 +37,8 @@ brew "gping"
 brew "gawk"
 brew "oven-sh/bun/bun"
 brew "magic-wormhole"
+brew "docker"
+brew "colima"
 
 # Casks
 # Meta-packages for .NET SDKs; install multiple versions as needed

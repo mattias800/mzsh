@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# mzsh-config: manage mzsh configuration in ~/.mzsh.json
+
+MZSH_HOME="${MZSH_HOME:-$HOME/.mzsh}"
+source "$MZSH_HOME/lib/config.sh"
+
+usage() {
+  cat >&2 << 'EOF'
+Usage: mzsh config <subcommand> [args]
+
+Subcommands:
+  get <key> [default]       Get a configuration value
+  set <key> <value>         Set a configuration value
+  delete <key>              Delete a configuration value
+  list                      List all configuration values
+
+Configuration keys:
+  secrets_provider          Secrets provider to use (op, bw, lpass)
+                            If not set, auto-detects available provider
+
+Examples:
+  mzsh config set secrets_provider op
+  mzsh config get secrets_provider
+  mzsh config list
+  mzsh config delete secrets_provider
+
+Configuration file: ~/.mzsh.json
+EOF
+}
+
+subcmd="${1:-list}"
+shift || true
+
+case "$subcmd" in
+  get)
+    if [[ $# -lt 1 ]]; then
+      echo "Error: 'get' requires a key argument" >&2
+      usage
+      exit 1
+    fi
+    key="$1"
+    default="${2:-}"
+    value=$(config_get "$key" "$default")
+    if [[ -n "$value" ]]; then
+      echo "$value"
+    else
+      echo "null"
+    fi
+    ;;
+  set)
+    if [[ $# -lt 2 ]]; then
+      echo "Error: 'set' requires key and value arguments" >&2
+      usage
+      exit 1
+    fi
+    key="$1"
+    value="$2"
+    config_set "$key" "$value"
+    echo "[mzsh] Set $key = $value" >&2
+    ;;
+  delete)
+    if [[ $# -lt 1 ]]; then
+      echo "Error: 'delete' requires a key argument" >&2
+      usage
+      exit 1
+    fi
+    key="$1"
+    config_delete "$key"
+    echo "[mzsh] Deleted $key" >&2
+    ;;
+  list)
+    echo "[mzsh] Configuration in ~/.mzsh.json:" >&2
+    config_list | sed 's/^/  /' >&2
+    ;;
+  *)
+    echo "Error: unknown subcommand: $subcmd" >&2
+    usage
+    exit 1
+    ;;
+esac

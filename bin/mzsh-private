@@ -7,6 +7,10 @@ set -euo pipefail
 PRIVATE_FILE="$HOME/.privaterc"
 PRIVATE_ITEM="mzsh-private (do not edit)"
 
+# Source config utilities
+MZSH_HOME="${MZSH_HOME:-$HOME/.mzsh}"
+source "$MZSH_HOME/lib/config.sh"
+
 # Detect available providers
 detect_provider() {
   if command -v op >/dev/null 2>&1; then echo op; return; fi
@@ -15,7 +19,19 @@ detect_provider() {
   return 1
 }
 
-PROVIDER=$(detect_provider) || PROVIDER=""
+# Get provider: use config preference or auto-detect
+get_provider() {
+  local configured_provider
+  configured_provider=$(config_get "secrets_provider" "")
+  
+  if [[ -n "$configured_provider" ]]; then
+    echo "$configured_provider"
+  else
+    detect_provider || true
+  fi
+}
+
+PROVIDER=$(get_provider) || PROVIDER=""
 
 usage() {
   cat >&2 << 'EOF'

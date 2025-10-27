@@ -11,6 +11,10 @@ case "$cmd" in
     shift
     exec "$HOME/.mzsh/bin/mzsh-install-deps" "$@"
     ;;
+  config)
+    shift
+    exec "$HOME/.mzsh/bin/mzsh-config" "$@"
+    ;;
   secrets)
     shift
     exec "$HOME/.mzsh/bin/mzsh-secrets" "$@"
@@ -38,6 +42,8 @@ Usage: mzsh <command> [args]
 Commands:
   update                                        # update mzsh and dependencies
   install-deps                                  # install/update dependencies from Brewfile
+  
+  config get|set|delete|list                    # manage ~/.mzsh.json configuration
   
   secrets pull [--manifest PATH] [--provider PROVIDER] [--dry-run]
   secrets sample [--manifest PATH]

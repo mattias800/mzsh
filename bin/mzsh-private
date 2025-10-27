@@ -82,8 +82,8 @@ pull() {
       
       # Try to fetch existing item
       if op item list --format=json 2>/dev/null | jq -e --arg name "$PRIVATE_ITEM" '.[] | select(.title == $name)' >/dev/null 2>&1; then
-        # Get the item and extract the note
-        op item get "$PRIVATE_ITEM" --format=json 2>/dev/null | jq -r '.notes // ""' > "$PRIVATE_FILE"
+        # Get the item and extract content from fields (Secure Note format)
+        op item get "$PRIVATE_ITEM" --format=json 2>/dev/null | jq -r '.fields[0].value // .notes // ""' > "$PRIVATE_FILE"
         echo "[mzsh] Pulled ~/.privaterc from 1Password" >&2
       else
         # Create new empty file

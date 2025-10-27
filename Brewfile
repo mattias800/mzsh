@@ -53,6 +53,7 @@ cask "warp"
 
 # Utility apps
 cask "trex"                               # OCR tool - extract text from screenshots
+cask "linearmouse"                        # customize mouse behavior - disable acceleration
 
 # Quick Look plugins
 cask "qlvideo"

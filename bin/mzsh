@@ -1,52 +1,33 @@
 #!/usr/bin/env bash
-# shellcheck shell=bash
 set -euo pipefail
 
-VERSION="0.1.0"
-
-_require_exec() {
-  command -v "$1" >/dev/null 2>&1 || {
-    printf 'mzsh: required helper not found in PATH: %s\n' "$1" >&2
-    exit 127
-  }
-}
-
-cmd="${1:-}"
+cmd=${1:-}
 case "$cmd" in
   update)
     shift
-    _require_exec mzsh-update
-    exec mzsh-update "$@"
+    exec "$HOME/.mzsh/bin/mzsh-update" "$@"
     ;;
   install-deps)
     shift
-    _require_exec mzsh-install-deps
-    exec mzsh-install-deps "$@"
+    exec "$HOME/.mzsh/bin/mzsh-install-deps" "$@"
     ;;
   secrets)
     shift
-    _require_exec mzsh-secrets
-    exec mzsh-secrets "$@"
+    exec "$HOME/.mzsh/bin/mzsh-secrets" "$@"
     ;;
   ssh)
     shift
-    _require_exec mzsh-ssh
-    exec mzsh-ssh "$@"
+    exec "$HOME/.mzsh/bin/mzsh-ssh" "$@"
     ;;
   electron-headless-fix-apply)
     shift
-    _require_exec electron-headless-fix-apply
-    exec electron-headless-fix-apply "$@"
+    exec "$HOME/.mzsh/bin/electron-headless-fix-apply" "$@"
     ;;
   electron-headless-fix-undo)
     shift
-    _require_exec electron-headless-fix-undo
-    exec electron-headless-fix-undo "$@"
+    exec "$HOME/.mzsh/bin/electron-headless-fix-undo" "$@"
     ;;
-  -v|--version)
-    printf 'mzsh %s\n' "$VERSION"
-    ;;
-  help|-h|--help|'')
+  help|-h|--help|"")
     cat <<'EOF'
 Usage: mzsh <command> [args]
 
@@ -83,7 +64,7 @@ writes them into ~/.mzsh/local.zsh between managed markers.
 EOF
     ;;
   *)
-    printf "mzsh: unknown command: %s (try 'mzsh --help')\n" "$cmd" >&2
-    exit 2
+    echo "mzsh: unknown command: $cmd" >&2
+    exit 1
     ;;
 esac

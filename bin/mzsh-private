@@ -6,18 +6,29 @@ set -euo pipefail
 
 PRIVATE_FILE="$HOME/.privaterc"
 PRIVATE_ITEM="mzsh-private (do not edit)"
-PROVIDER="${1:-op}"
+
+# Detect available providers
+detect_provider() {
+  if command -v op >/dev/null 2>&1; then echo op; return; fi
+  if command -v bw >/dev/null 2>&1; then echo bw; return; fi
+  if command -v lpass >/dev/null 2>&1; then echo lpass; return; fi
+  return 1
+}
+
+PROVIDER=$(detect_provider) || PROVIDER=""
 
 usage() {
   cat >&2 << 'EOF'
 Usage: mzsh private <subcommand> [options]
 
 Subcommands:
-  pull [--provider PROVIDER]  Fetch ~/.privaterc from 1Password (create if missing)
-  push [--provider PROVIDER]  Push ~/.privaterc to 1Password
+  pull  Fetch ~/.privaterc from secrets provider (create if missing)
+  push  Push ~/.privaterc to secrets provider
 
-Providers:
-  op        1Password CLI (default)
+Supported Providers:
+  op      1Password CLI
+  bw      Bitwarden CLI
+  lpass   LastPass CLI
 
 Examples:
   mzsh private pull
@@ -27,12 +38,29 @@ The ~/.privaterc file is automatically sourced when your shell starts.
 EOF
 }
 
+check_provider() {
+  if [[ -z "$PROVIDER" ]]; then
+    echo "Error: No secrets provider found" >&2
+    echo "" >&2
+    echo "Please install and configure one of the supported providers:" >&2
+    echo "  - 1Password CLI: mzsh secrets install op" >&2
+    echo "  - Bitwarden CLI: mzsh secrets install bw" >&2
+    echo "  - LastPass CLI: mzsh secrets install lpass" >&2
+    echo "" >&2
+    echo "After installation, sign in to your provider:" >&2
+    echo "  op signin       # for 1Password" >&2
+    echo "  bw login       # for Bitwarden" >&2
+    echo "  lpass login    # for LastPass" >&2
+    exit 1
+  fi
+}
+
 require() { command -v "$1" >/dev/null 2>&1 || { echo "Missing dependency: $1" >&2; exit 1; }; }
 
 pull() {
-  local provider="$1"
+  check_provider
   
-  case "$provider" in
+  case "$PROVIDER" in
     op)
       require op
       
@@ -60,14 +88,14 @@ TEMPLATE
       chmod 600 "$PRIVATE_FILE"
       ;;
     *)
-      echo "Unknown provider: $provider" >&2
+      echo "Unknown provider: $PROVIDER" >&2
       return 1
       ;;
   esac
 }
 
 push() {
-  local provider="$1"
+  check_provider
   
   if [[ ! -f "$PRIVATE_FILE" ]]; then
     echo "File not found: $PRIVATE_FILE" >&2
@@ -75,7 +103,7 @@ push() {
     return 1
   fi
   
-  case "$provider" in
+  case "$PROVIDER" in
     op)
       require op
       
@@ -99,7 +127,7 @@ push() {
       fi
       ;;
     *)
-      echo "Unknown provider: $provider" >&2
+      echo "Unknown provider: $PROVIDER" >&2
       return 1
       ;;
   esac
@@ -110,12 +138,10 @@ shift || true
 
 case "$subcmd" in
   pull)
-    provider="${1:-op}"
-    pull "$provider"
+    pull
     ;;
   push)
-    provider="${1:-op}"
-    push "$provider"
+    push
     ;;
   *)
     usage

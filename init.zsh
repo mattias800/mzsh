@@ -24,3 +24,6 @@ for f in "$BASE_DIR/aliases"/*.zsh; do [ -f "$f" ] && source "$f"; done
 
 # 5) Local machine overrides (ignored by git)
 [ -f "$BASE_DIR/local.zsh" ] && source "$BASE_DIR/local.zsh"
+
+# 6) Private configuration synced with 1Password
+[ -f "$HOME/.privaterc" ] && source "$HOME/.privaterc"

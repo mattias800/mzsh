@@ -15,6 +15,10 @@ case "$cmd" in
     shift
     exec "$HOME/.mzsh/bin/mzsh-secrets" "$@"
     ;;
+  private)
+    shift
+    exec "$HOME/.mzsh/bin/mzsh-private" "$@"
+    ;;
   ssh)
     shift
     exec "$HOME/.mzsh/bin/mzsh-ssh" "$@"
@@ -39,6 +43,9 @@ Commands:
   secrets sample [--manifest PATH]
   secrets install [op|bw|lpass|all]            # install required CLI(s) via Homebrew
   secrets doctor                                # check setup and provide guidance
+  
+  private pull                                  # fetch ~/.privaterc from 1Password
+  private push                                  # push ~/.privaterc to 1Password
   
   ssh [args]                                    # SSH command wrapper
   

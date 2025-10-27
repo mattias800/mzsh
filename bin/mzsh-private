@@ -122,23 +122,32 @@ push() {
   case "$PROVIDER" in
     op)
       require op
+      require jq
       
-      local content
-      content=$(cat "$PRIVATE_FILE")
+      local item_id
+      local file_content
+      local template_file
+      local escaped_content
       
-      # Check if item exists
-      if op item list --format=json 2>/dev/null | jq -e --arg name "$PRIVATE_ITEM" '.[] | select(.title == $name)' >/dev/null 2>&1; then
-        # Update existing item
-        # We need to use a temporary file because op item edit doesn't support stdin for notes
-        local tmp_file
-        tmp_file=$(mktemp)
-        cat "$PRIVATE_FILE" > "$tmp_file"
-        op item edit "$PRIVATE_ITEM" --notes "$(cat "$tmp_file")" 2>/dev/null || true
-        rm -f "$tmp_file"
+      item_id=$(op item list --format=json 2>/dev/null | jq -r --arg name "$PRIVATE_ITEM" '.[] | select(.title == $name) | .id' | head -1)
+      file_content=$(cat "$PRIVATE_FILE")
+      
+      # Create template with file content
+      template_file=$(mktemp)
+      trap "rm -f '$template_file'" EXIT
+      
+      op item template get "Secure Note" > "$template_file" 2>/dev/null
+      jq --arg content "$file_content" '.title = "mzsh-private (do not edit)" | .fields[0].value = $content' "$template_file" > "${template_file}.tmp"
+      mv "${template_file}.tmp" "$template_file"
+      
+      if [[ -n "$item_id" && "$item_id" != "null" ]]; then
+        # Update existing item by deleting and recreating
+        op item delete "$item_id" 2>/dev/null || true
+        op item create < "$template_file" 2>/dev/null || true
         echo "[mzsh] Updated ~/.privaterc in 1Password" >&2
       else
-        # Create new item with the file content as notes
-        op item create --category secure_note --title "$PRIVATE_ITEM" --notes "$(cat "$PRIVATE_FILE")" 2>/dev/null || true
+        # Create new item
+        op item create < "$template_file" 2>/dev/null || true
         echo "[mzsh] Created ~/.privaterc in 1Password" >&2
       fi
       ;;

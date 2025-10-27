@@ -51,6 +51,9 @@ cask "slack"
 cask "discord"
 cask "warp"
 
+# Utility apps
+cask "trex"                               # OCR tool - extract text from screenshots
+
 # Quick Look plugins
 cask "qlvideo"
 cask "quicklook-json"

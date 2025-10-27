@@ -38,6 +38,7 @@ brew "gawk"
 brew "oven-sh/bun/bun"
 brew "magic-wormhole"
 brew "docker"
+brew "docker-compose"
 brew "colima"
 
 # Casks

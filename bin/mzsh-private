@@ -143,11 +143,15 @@ push() {
       if [[ -n "$item_id" && "$item_id" != "null" ]]; then
         # Update existing item by deleting and recreating
         op item delete "$item_id" 2>/dev/null || true
-        op item create < "$template_file" 2>/dev/null || true
+        cat "$template_file" | op item create 2>&1 | grep -E "^(ID|ERROR)" >&2 || {
+          echo "[mzsh] Warning: item creation may have failed" >&2
+        }
         echo "[mzsh] Updated ~/.privaterc in 1Password" >&2
       else
         # Create new item
-        op item create < "$template_file" 2>/dev/null || true
+        cat "$template_file" | op item create 2>&1 | grep -E "^(ID|ERROR)" >&2 || {
+          echo "[mzsh] Warning: item creation may have failed" >&2
+        }
         echo "[mzsh] Created ~/.privaterc in 1Password" >&2
       fi
       ;;

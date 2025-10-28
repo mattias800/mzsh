@@ -79,4 +79,15 @@ else
   git clone --depth=1 https://github.com/changyuheng/zsh-interactive-cd "$VENDOR_DIR"
 fi
 
+# Setup Docker Compose as a Docker CLI plugin (enables `docker compose` command)
+if command -v docker >/dev/null 2>&1 && command -v docker-compose >/dev/null 2>&1; then
+  DOCKER_PLUGINS_DIR="$HOME/.docker/cli-plugins"
+  DOCKER_COMPOSE_PATH="$(command -v docker-compose)"
+  mkdir -p "$DOCKER_PLUGINS_DIR"
+  if [ ! -L "$DOCKER_PLUGINS_DIR/docker-compose" ]; then
+    echo "[mzsh] Setting up docker-compose as Docker CLI plugin"
+    ln -sf "$DOCKER_COMPOSE_PATH" "$DOCKER_PLUGINS_DIR/docker-compose"
+  fi
+fi
+
 echo "[mzsh] Done. If needed, restart your terminal."

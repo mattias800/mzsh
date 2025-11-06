@@ -43,6 +43,10 @@ git -C "$REPO_DIR" pull --ff-only --quiet || {
   exit 1
 }
 
+# Offer to remove Oh My Zsh if present (mzsh uses Antigen instead)
+source "$REPO_DIR/lib/remove-ohmyzsh.sh"
+remove_ohmyzsh_if_exists
+
 # Reinstall/ensure dependencies
 "$REPO_DIR/bin/mzsh-install-deps"
 

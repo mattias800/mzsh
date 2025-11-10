@@ -35,13 +35,13 @@ brew "resvg"
 brew "imagemagick"
 brew "gping"
 brew "gawk"
+brew "node"
 brew "oven-sh/bun/bun"
 brew "pnpm"
 brew "magic-wormhole"
 brew "docker"
 brew "docker-compose"
 brew "colima"
-brew "node"
 
 # Casks
 # Meta-packages for .NET SDKs; install multiple versions as needed

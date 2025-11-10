@@ -2,6 +2,44 @@
 # Reusable function to check for and optionally remove oh-my-zsh installation
 # Call: remove_ohmyzsh_if_exists
 
+# Clean up Oh My Zsh references from ~/.zshrc after uninstallation
+cleanup_zshrc_omz_references() {
+  local zshrc="$HOME/.zshrc"
+  
+  if [ ! -f "$zshrc" ]; then
+    return 0
+  fi
+  
+  # Check if there are any OMZ references to clean up
+  if ! grep -q -E '(export ZSH=|source.*oh-my-zsh\.sh|^ZSH_THEME=|^plugins=)' "$zshrc"; then
+    return 0
+  fi
+  
+  # Create a timestamped backup
+  local backup="${zshrc}.backup-omz-removal-$(date +%s)"
+  cp "$zshrc" "$backup"
+  echo "[mzsh] Created backup at $backup"
+  
+  echo "[mzsh] Cleaning up Oh My Zsh references from ~/.zshrc..."
+  
+  # Use sed to remove OMZ-specific lines:
+  # 1. Lines exporting ZSH variable pointing to ~/.oh-my-zsh
+  # 2. Lines sourcing oh-my-zsh.sh (with/without quotes)
+  # 3. Lines setting ZSH_THEME (Antigen manages themes independently)
+  # 4. Lines defining plugins (Oh My Zsh plugin arrays)
+  sed -i.tmp \
+    -e '/^export ZSH[[:space:]]*=/d' \
+    -e '/^source[[:space:]]*.*oh-my-zsh\.sh/d' \
+    -e '/^ZSH_THEME[[:space:]]*=/d' \
+    -e '/^plugins[[:space:]]*=/,/^)/d' \
+    "$zshrc"
+  
+  # Clean up sed's temporary backup
+  rm -f "${zshrc}.tmp"
+  
+  echo "[mzsh] Cleanup complete. Backup saved to $backup"
+}
+
 remove_ohmyzsh_if_exists() {
   local omz_dir="$HOME/.oh-my-zsh"
   
@@ -33,6 +71,11 @@ remove_ohmyzsh_if_exists() {
       else
         echo "[mzsh] Uninstaller not found; removing ~/.oh-my-zsh directory"
         rm -rf "$omz_dir"
+      fi
+      
+      # After successful removal, clean up .zshrc references
+      if [ ! -d "$omz_dir" ]; then
+        cleanup_zshrc_omz_references
       fi
       ;;
     *)

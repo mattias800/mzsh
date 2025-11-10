@@ -12,7 +12,16 @@ Modular Zsh configuration for macOS. Clone, source `init.zsh` from your local `~
 curl -fsSL https://raw.githubusercontent.com/mattias800/mzsh/main/bin/install.sh | bash
 ```
 
-During installation, if an existing Oh My Zsh is detected, the installer will ask if you want to remove it. mzsh uses Antigen instead of Oh My Zsh, so OMZ is not required. If you agree, the official OMZ uninstaller is invoked.
+During installation, if an existing Oh My Zsh is detected, the installer will ask if you want to remove it. mzsh uses Antigen instead of Oh My Zsh, so OMZ is not required. If you agree, the official OMZ uninstaller is invoked, and mzsh will then automatically clean up any Oh My Zsh references from your `~/.zshrc` file.
+
+**Automatic cleanup details:**
+When Oh My Zsh is removed, the following lines are automatically removed from `~/.zshrc`:
+- `export ZSH=...` (the Oh My Zsh installation path)
+- `source $ZSH/oh-my-zsh.sh` (and similar variants)
+- `ZSH_THEME=...` (Oh My Zsh theme settings; Antigen handles themes independently via `antigen theme` commands)
+- `plugins=(...)` arrays (Oh My Zsh plugin syntax; Antigen uses `antigen bundle` instead)
+
+A timestamped backup is created at `~/.zshrc.backup-omz-removal-{timestamp}` before any changes are made. The cleanup is idempotent and safe to run multiple times.
 
 Note: The config is relocatable. `init.zsh` sources all modules relative to its own path, so you can clone it anywhere; just adjust the source line accordingly.
 

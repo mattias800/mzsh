@@ -90,4 +90,36 @@ if command -v docker >/dev/null 2>&1 && command -v docker-compose >/dev/null 2>&
   fi
 fi
 
+# Install tmux configuration
+echo "[mzsh] Installing tmux configuration"
+TMUX_CONF="$REPO_DIR/config/tmux/tmux.conf"
+if [ -f "$TMUX_CONF" ]; then
+  if [ -f "$HOME/.tmux.conf" ]; then
+    echo "[mzsh] Backing up existing ~/.tmux.conf to ~/.tmux.conf.bak"
+    cp "$HOME/.tmux.conf" "$HOME/.tmux.conf.bak"
+  fi
+  cp "$TMUX_CONF" "$HOME/.tmux.conf"
+  echo "[mzsh] tmux config installed to ~/.tmux.conf"
+else
+  echo "[mzsh] WARNING: tmux config not found at $TMUX_CONF"
+fi
+
+# Install neovim configuration
+echo "[mzsh] Installing neovim configuration"
+NVIM_CONFIG_SRC="$REPO_DIR/config/nvim"
+NVIM_CONFIG_DEST="$HOME/.config/nvim"
+if [ -d "$NVIM_CONFIG_SRC" ]; then
+  mkdir -p "$NVIM_CONFIG_DEST"
+  if [ -d "$NVIM_CONFIG_DEST" ] && [ "$(ls -A "$NVIM_CONFIG_DEST")" ]; then
+    BACKUP_DIR="$HOME/.config/nvim.bak-$(date +%s)"
+    echo "[mzsh] Backing up existing nvim config to $BACKUP_DIR"
+    mv "$NVIM_CONFIG_DEST" "$BACKUP_DIR"
+    mkdir -p "$NVIM_CONFIG_DEST"
+  fi
+  cp -r "$NVIM_CONFIG_SRC"/* "$NVIM_CONFIG_DEST/"
+  echo "[mzsh] Neovim config installed to ~/.config/nvim"
+else
+  echo "[mzsh] WARNING: Neovim config not found at $NVIM_CONFIG_SRC"
+fi
+
 echo "[mzsh] Done. If needed, restart your terminal."

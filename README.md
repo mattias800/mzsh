@@ -189,6 +189,33 @@ Tools (enabled/configured)
   z project         # jump to a frequently used directory matching "project"
   zi -              # jump to previous directory
   ```
+- tmux (terminal multiplexer)
+  ```bash
+  tm              # start tmux
+  tma             # attach to last session
+  tmaa [name]     # attach to session or create if doesn't exist
+  tmn myname      # create new session named "myname"
+  tml             # list sessions
+  tmk name        # kill session named "name"
+  ```
+  Default keybindings:
+  - Ctrl-b |  split pane horizontally
+  - Ctrl-b -  split pane vertically
+  - Ctrl-b h/j/k/l  navigate panes (vim-style)
+  - Ctrl-b H/J/K/L  resize panes (vim-style)
+  - Ctrl-b r  reload config
+- neovim (text editor)
+  ```bash
+  v, vim, vi, nv  # aliases for nvim
+  nvl file [line] # open file at specific line
+  ```
+  Leader key: <Space>
+  Key features:
+  - Treesitter syntax highlighting
+  - Telescope fuzzy finder: <leader>ff (files), <leader>fg (grep), <leader>fb (buffers)
+  - Neo-tree file explorer: <leader>e
+  - LSP support with completion
+  - vim-style navigation in all modes
 
 Plugins via Antigen (Oh My Zsh plugins loaded via Antigen; OMZ itself is not installed)
 - git: adds many aliases
@@ -251,6 +278,10 @@ Plugins via Antigen (Oh My Zsh plugins loaded via Antigen; OMZ itself is not ins
 - aliases/git.zsh         # git maintenance helpers
 - tools/node.zsh          # Node helpers (e.g., types alias)
 - tools/git.zsh           # Git helpers (fzf-powered branch switcher)
+- tools/tmux.zsh          # Tmux helpers and aliases
+- tools/neovim.zsh        # Neovim aliases (vim->nvim)
+- config/tmux/tmux.conf   # Default tmux config (installed to ~/.tmux.conf)
+- config/nvim/            # Neovim config (installed to ~/.config/nvim)
 - local.zsh               # Optional machine-local tweaks (ignored)
 
 ## Dependencies

@@ -43,6 +43,9 @@ brew "magic-wormhole"
 brew "docker"
 brew "docker-compose"
 brew "colima"
+brew "tmux"
+brew "neovim"
+brew "prettierd"
 
 # Casks
 # Meta-packages for .NET SDKs; install multiple versions as needed

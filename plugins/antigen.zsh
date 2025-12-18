@@ -25,7 +25,6 @@ zstyle :omz:plugins:ssh-agent quiet yes
 # Define plugin list
 _antigen_plugins=(
   "ohmyzsh/ohmyzsh plugins/git"
-  "ohmyzsh/ohmyzsh plugins/z"
   "ohmyzsh/ohmyzsh plugins/fzf"
   "ohmyzsh/ohmyzsh plugins/extract"
   "ohmyzsh/ohmyzsh plugins/completions"

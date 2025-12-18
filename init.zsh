@@ -9,6 +9,11 @@ case ":$PATH:" in
   *) export PATH="$BASE_DIR/bin:$PATH" ;;
  esac
 
+# 0) Zoxide initialization (must come before antigen)
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+fi
+
 # 1) Antigen plugin manager
 [ -f "$BASE_DIR/plugins/antigen.zsh" ] && source "$BASE_DIR/plugins/antigen.zsh"
 

@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+echo -e "${YELLOW}Clearing mzsh and antigen caches...${NC}"
+
+# Array to track what was cleared
+cleared=()
+failed=()
+
+# Clear antigen bundles
+if [ -d "$HOME/.antigen/bundles" ]; then
+  rm -rf "$HOME/.antigen/bundles" && cleared+=("antigen bundles") || failed+=("antigen bundles")
+fi
+
+# Clear antigen init script
+if [ -f "$HOME/.antigen/init.zsh" ]; then
+  rm -f "$HOME/.antigen/init.zsh" && cleared+=("antigen init script") || failed+=("antigen init script")
+fi
+
+# Clear antigen compiled cache files
+if [ -d "$HOME/.antigen" ]; then
+  rm -f "$HOME/.antigen"/*.zwc && cleared+=("antigen compiled caches") || failed+=("antigen compiled caches")
+fi
+
+# Clear zsh completion dump
+rm -f "$HOME"/.zcompdump* && cleared+=("zsh completion dumps") || failed+=("zsh completion dumps")
+
+# Print results
+if [ ${#cleared[@]} -gt 0 ]; then
+  echo -e "${GREEN}✓ Cleared:${NC}"
+  for item in "${cleared[@]}"; do
+    echo "  - $item"
+  done
+fi
+
+if [ ${#failed[@]} -gt 0 ]; then
+  echo -e "${RED}✗ Failed to clear:${NC}"
+  for item in "${failed[@]}"; do
+    echo "  - $item"
+  done
+  exit 1
+fi
+
+echo -e "${GREEN}Done! Caches cleared successfully.${NC}"
+echo -e "${YELLOW}Run 'zsh' to regenerate caches on next shell startup.${NC}"

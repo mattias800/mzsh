@@ -1,5 +1,6 @@
 # Use zoxide for cd if available
-if command -v zoxide >/dev/null 2>&1; then
+# Only define custom cd function if __zoxide_cd is available (non-interactive shells won't have it)
+if command -v zoxide >/dev/null 2>&1 && type __zoxide_cd >/dev/null 2>&1; then
   # Create a smart cd function that uses zoxide for frecency lookup
   function cd() {
     if [[ $# -eq 0 ]]; then

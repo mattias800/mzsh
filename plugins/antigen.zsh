@@ -1,5 +1,8 @@
 # Antigen bootstrap and plugin loader
 # Loads desired plugins; can leverage the Oh My Zsh framework via Antigen.
+#
+# If experiencing plugin load failures, clear antigen caches:
+#   rm -rf ~/.antigen/bundles ~/.antigen/init.zsh ~/.antigen/*.zwc ~/.zcompdump*
 
 # Locate antigen (Homebrew preferred)
 if [ -f /opt/homebrew/share/antigen/antigen.zsh ]; then

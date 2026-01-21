@@ -13,6 +13,16 @@ echo -e "${YELLOW}Clearing mzsh and antigen caches...${NC}"
 cleared=()
 failed=()
 
+# Kill any stuck zsh processes to release lock files
+if pgrep -q zsh 2>/dev/null; then
+  sleep 0.5  # Brief pause to allow current shells to finish
+fi
+
+# Clear antigen lock file first
+if [ -f "$HOME/.antigen/.lock" ]; then
+  rm -f "$HOME/.antigen/.lock" && cleared+=("antigen lock file") || failed+=("antigen lock file")
+fi
+
 # Clear antigen bundles
 if [ -d "$HOME/.antigen/bundles" ]; then
   rm -rf "$HOME/.antigen/bundles" && cleared+=("antigen bundles") || failed+=("antigen bundles")
@@ -26,6 +36,11 @@ fi
 # Clear antigen compiled cache files
 if [ -d "$HOME/.antigen" ]; then
   rm -f "$HOME/.antigen"/*.zwc && cleared+=("antigen compiled caches") || failed+=("antigen compiled caches")
+fi
+
+# Clear antigen debug log
+if [ -f "$HOME/.antigen/debug.log" ]; then
+  rm -f "$HOME/.antigen/debug.log" && cleared+=("antigen debug log") || failed+=("antigen debug log")
 fi
 
 # Clear zsh completion dump

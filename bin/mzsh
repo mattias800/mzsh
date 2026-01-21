@@ -83,6 +83,7 @@ EOF
     ;;
   *)
     echo "mzsh: unknown command: $cmd" >&2
-    exit 1
+    echo ""
+    exec "$HOME/.mzsh/bin/mzsh" help
     ;;
 esac

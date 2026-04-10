@@ -19,7 +19,6 @@ brew "bat"
 brew "eza"
 brew "yazi"
 brew "atuin"
-brew "z"
 brew "git-delta"
 brew "htop"
 brew "btop"
@@ -60,6 +59,7 @@ cask "warp"
 # Utility apps
 cask "trex"                               # OCR tool - extract text from screenshots
 cask "linearmouse"                        # customize mouse behavior - disable acceleration
+cask "dockdoor"                           # window peeking utility for the Dock
 
 # Quick Look plugins
 cask "qlvideo"

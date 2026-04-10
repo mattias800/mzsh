@@ -62,7 +62,7 @@ cask "linearmouse"                        # customize mouse behavior - disable a
 cask "dockdoor"                           # window peeking utility for the Dock
 
 # Quick Look plugins
-cask "qlvideo"
+cask "quicklook-video"
 cask "quicklook-json"
 cask "syntax-highlight"          # syntax highlighting for source code and text files
 cask "webpquicklook"

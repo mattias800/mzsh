@@ -9,9 +9,6 @@ tap "isen-ng/dotnet-sdk-versions"
 # Bun (official tap for compatibility across Homebrew versions)
 tap "oven-sh/bun"
 
-# Flux Markdown (third-party tap) — rendered markdown Quick Look
-tap "xykong/tap"
-
 # Formulae
 brew "git"
 brew "zsh-autosuggestions"
@@ -68,7 +65,7 @@ cask "dockdoor"                           # window peeking utility for the Dock
 cask "quicklook-video"
 cask "quicklook-json"
 cask "syntax-highlight"          # syntax highlighting for source code and text files
-cask "flux-markdown"             # rendered markdown Quick Look (takes precedence over syntax-highlight for .md)
+cask "xykong/tap/flux-markdown"  # rendered markdown Quick Look (auto-taps xykong/tap)
 cask "webpquicklook"
 cask "suspicious-package"
 cask "quicklook-csv"

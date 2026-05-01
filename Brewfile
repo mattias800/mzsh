@@ -35,6 +35,7 @@ brew "imagemagick"
 brew "gping"
 brew "gawk"
 brew "tree"
+brew "tokei"
 brew "node"
 brew "oven-sh/bun/bun"
 brew "pnpm"
@@ -48,8 +49,8 @@ brew "prettierd"
 
 # Casks
 # Meta-packages for .NET SDKs; install multiple versions as needed
-cask "dotnet-sdk8"
 cask "dotnet-sdk9"
+cask "dotnet-sdk10"
 
 # Communication apps
 cask "slack"

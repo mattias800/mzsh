@@ -64,7 +64,6 @@ cask "dockdoor"                           # window peeking utility for the Dock
 
 # Quick Look plugins
 cask "quicklook-video"
-cask "quicklook-json"
 cask "syntax-highlight"          # syntax highlighting for source code and text files
 cask "xykong/tap/flux-markdown"  # rendered markdown Quick Look (auto-taps xykong/tap)
 cask "webpquicklook"

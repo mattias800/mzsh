@@ -122,4 +122,7 @@ else
   echo "[mzsh] WARNING: Neovim config not found at $NVIM_CONFIG_SRC"
 fi
 
+# Disable conflicting macOS Services keyboard shortcuts (⌘⇧A, ⌘⇧M)
+"$REPO_DIR/bin/mzsh-disable-macos-shortcuts" || true
+
 echo "[mzsh] Done. If needed, restart your terminal."

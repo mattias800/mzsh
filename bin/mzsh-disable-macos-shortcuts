@@ -21,7 +21,7 @@ SERVICES=(
   "com.apple.Terminal - Open man Page in Terminal - openManPage"
 )
 
-DISABLED_DICT='{ "enabled_context_menu" = 0; "enabled_services_menu" = 0; "presentation_modes" = { "ContextMenu" = 0; "ServicesMenu" = 0; }; }'
+DISABLED_DICT='{ "enabled_context_menu" = 0; "enabled_services_menu" = 0; "key_equivalent" = ""; "presentation_modes" = { "ContextMenu" = 0; "ServicesMenu" = 0; }; }'
 
 for key in "${SERVICES[@]}"; do
   echo "[mzsh] Disabling macOS service shortcut: $key"

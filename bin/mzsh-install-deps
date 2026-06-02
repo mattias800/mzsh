@@ -122,14 +122,6 @@ else
   echo "[mzsh] WARNING: Neovim config not found at $NVIM_CONFIG_SRC"
 fi
 
-# Configure Git Credential Manager as git credential helper (idempotent)
-if command -v git-credential-manager >/dev/null 2>&1; then
-  if ! git config --get-all credential.helper 2>/dev/null | grep -q "git-credential-manager"; then
-    echo "[mzsh] Configuring Git Credential Manager as git credential helper"
-    git-credential-manager configure
-  fi
-fi
-
 # Disable conflicting macOS Services keyboard shortcuts (⌘⇧A, ⌘⇧M)
 "$REPO_DIR/bin/mzsh-disable-macos-shortcuts" || true
 

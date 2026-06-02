@@ -58,7 +58,6 @@ cask "discord"
 cask "warp"
 
 # Utility apps
-cask "git-credential-manager"             # Microsoft's Git Credential Manager - secure git auth (GitHub, Azure DevOps, etc.)
 cask "trex"                               # OCR tool - extract text from screenshots
 cask "linearmouse"                        # customize mouse behavior - disable acceleration
 cask "dockdoor"                           # window peeking utility for the Dock

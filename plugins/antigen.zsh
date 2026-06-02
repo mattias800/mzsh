@@ -30,7 +30,6 @@ _antigen_plugins=(
   "ohmyzsh/ohmyzsh plugins/git"
   "ohmyzsh/ohmyzsh plugins/fzf"
   "ohmyzsh/ohmyzsh plugins/extract"
-  "ohmyzsh/ohmyzsh plugins/completions"
   "ohmyzsh/ohmyzsh plugins/yarn"
   "ohmyzsh/ohmyzsh plugins/ssh-agent"
   "zsh-users/zsh-autosuggestions"

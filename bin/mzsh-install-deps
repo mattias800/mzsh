@@ -141,6 +141,16 @@ fi
 # Disable conflicting macOS Services keyboard shortcuts (⌘⇧A, ⌘⇧M)
 "$REPO_DIR/bin/mzsh-disable-macos-shortcuts" || record_failure "disable macOS shortcuts"
 
+# Use F1, F2, etc. as standard function keys (instead of media keys)
+if [ "$(uname)" = "Darwin" ]; then
+  echo "[mzsh] Setting keyboard to use F1, F2, etc. as standard function keys"
+  defaults write -g com.apple.keyboard.fnState -bool true || record_failure "keyboard fnState"
+  # Apply without logout
+  if [ -x /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings ]; then
+    /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u >/dev/null 2>&1 || true
+  fi
+fi
+
 if [ ${#FAILED_JOBS[@]} -gt 0 ]; then
   echo "[mzsh] Done, but ${#FAILED_JOBS[@]} job(s) failed:" >&2
   for job in "${FAILED_JOBS[@]}"; do

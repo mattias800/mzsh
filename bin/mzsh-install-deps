@@ -3,6 +3,16 @@ set -euo pipefail
 
 # mzsh: install recommended dependencies on macOS via Homebrew
 # Safe to re-run; will skip already installed packages.
+# Individual jobs are non-fatal: failures are recorded and reported at the end
+# so that one failing job (e.g. brew bundle while Docker is running) does not
+# prevent the remaining jobs from running.
+
+FAILED_JOBS=()
+
+record_failure() {
+  FAILED_JOBS+=("$1")
+  echo "[mzsh] WARNING: job failed: $1 (continuing)" >&2
+}
 
 # Ensure Homebrew exists and is on PATH (install if missing)
 ensure_brew() {
@@ -67,7 +77,7 @@ if brew bundle --help 2>/dev/null | grep -q -- "--no-lock"; then
 fi
 
 # Avoid auto-update during bundle to reduce failure surface on older setups
-HOMEBREW_NO_AUTO_UPDATE=1 brew bundle install ${NO_LOCK_FLAG} --file "$BREWFILE"
+HOMEBREW_NO_AUTO_UPDATE=1 brew bundle install ${NO_LOCK_FLAG} --file "$BREWFILE" || record_failure "brew bundle"
 
 # Install zsh-interactive-cd into vendor path (no OMZ required)
 VENDOR_DIR="$HOME/.local/share/zsh-interactive-cd"
@@ -76,7 +86,7 @@ if [ -d "$VENDOR_DIR/.git" ]; then
 else
   echo "[mzsh] Installing zsh-interactive-cd plugin into $VENDOR_DIR"
   mkdir -p "$HOME/.local/share"
-  git clone --depth=1 https://github.com/changyuheng/zsh-interactive-cd "$VENDOR_DIR"
+  git clone --depth=1 https://github.com/changyuheng/zsh-interactive-cd "$VENDOR_DIR" || record_failure "zsh-interactive-cd install"
 fi
 
 # Setup Docker Compose as a Docker CLI plugin (enables `docker compose` command)
@@ -96,10 +106,13 @@ TMUX_CONF="$REPO_DIR/config/tmux/tmux.conf"
 if [ -f "$TMUX_CONF" ]; then
   if [ -f "$HOME/.tmux.conf" ]; then
     echo "[mzsh] Backing up existing ~/.tmux.conf to ~/.tmux.conf.bak"
-    cp "$HOME/.tmux.conf" "$HOME/.tmux.conf.bak"
+    cp "$HOME/.tmux.conf" "$HOME/.tmux.conf.bak" || record_failure "tmux config backup"
   fi
-  cp "$TMUX_CONF" "$HOME/.tmux.conf"
-  echo "[mzsh] tmux config installed to ~/.tmux.conf"
+  if cp "$TMUX_CONF" "$HOME/.tmux.conf"; then
+    echo "[mzsh] tmux config installed to ~/.tmux.conf"
+  else
+    record_failure "tmux config install"
+  fi
 else
   echo "[mzsh] WARNING: tmux config not found at $TMUX_CONF"
 fi
@@ -113,16 +126,27 @@ if [ -d "$NVIM_CONFIG_SRC" ]; then
   if [ -d "$NVIM_CONFIG_DEST" ] && [ "$(ls -A "$NVIM_CONFIG_DEST")" ]; then
     BACKUP_DIR="$HOME/.config/nvim.bak-$(date +%s)"
     echo "[mzsh] Backing up existing nvim config to $BACKUP_DIR"
-    mv "$NVIM_CONFIG_DEST" "$BACKUP_DIR"
+    mv "$NVIM_CONFIG_DEST" "$BACKUP_DIR" || record_failure "nvim config backup"
     mkdir -p "$NVIM_CONFIG_DEST"
   fi
-  cp -r "$NVIM_CONFIG_SRC"/* "$NVIM_CONFIG_DEST/"
-  echo "[mzsh] Neovim config installed to ~/.config/nvim"
+  if cp -r "$NVIM_CONFIG_SRC"/* "$NVIM_CONFIG_DEST/"; then
+    echo "[mzsh] Neovim config installed to ~/.config/nvim"
+  else
+    record_failure "nvim config install"
+  fi
 else
   echo "[mzsh] WARNING: Neovim config not found at $NVIM_CONFIG_SRC"
 fi
 
 # Disable conflicting macOS Services keyboard shortcuts (⌘⇧A, ⌘⇧M)
-"$REPO_DIR/bin/mzsh-disable-macos-shortcuts" || true
+"$REPO_DIR/bin/mzsh-disable-macos-shortcuts" || record_failure "disable macOS shortcuts"
+
+if [ ${#FAILED_JOBS[@]} -gt 0 ]; then
+  echo "[mzsh] Done, but ${#FAILED_JOBS[@]} job(s) failed:" >&2
+  for job in "${FAILED_JOBS[@]}"; do
+    echo "[mzsh]   - $job" >&2
+  done
+  exit 1
+fi
 
 echo "[mzsh] Done. If needed, restart your terminal."

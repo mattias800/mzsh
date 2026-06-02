@@ -47,7 +47,13 @@ git -C "$REPO_DIR" pull --ff-only --quiet || {
 source "$REPO_DIR/lib/remove-ohmyzsh.sh"
 remove_ohmyzsh_if_exists
 
-# Reinstall/ensure dependencies
-"$REPO_DIR/bin/mzsh-install-deps"
+# Reinstall/ensure dependencies (non-fatal: failed jobs are reported by the script itself)
+deps_status=0
+"$REPO_DIR/bin/mzsh-install-deps" || deps_status=$?
+
+if [ "$deps_status" -ne 0 ]; then
+  echo "[mzsh] Update finished with some failed jobs (see above). Restart your terminal or run: exec zsh" >&2
+  exit "$deps_status"
+fi
 
 echo "[mzsh] Update complete. Restart your terminal or run: exec zsh"

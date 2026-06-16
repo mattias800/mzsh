@@ -63,7 +63,6 @@ cask "warp"
 cask "raycast"                            # launcher - replaces Spotlight (hotkeys disabled by mzsh-disable-macos-shortcuts)
 cask "trex"                               # OCR tool - extract text from screenshots
 cask "linearmouse"                        # customize mouse behavior - disable acceleration
-cask "dockdoor"                           # window peeking utility for the Dock
 
 # Quick Look plugins
 cask "quicklook-video"

@@ -51,7 +51,7 @@ Commands:
   update                                        # update mzsh and dependencies
   install-deps                                  # install/update dependencies from Brewfile
   clear-cache                                   # clear antigen and zsh caches
-  disable-macos-shortcuts                       # disable conflicting macOS Services shortcuts (⌘⇧A, ⌘⇧M)
+  disable-macos-shortcuts                       # disable conflicting macOS shortcuts, rebind window switching to ⌥Tab
   
   config get|set|delete|list                    # manage ~/.mzsh.json configuration
   

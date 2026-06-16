@@ -138,7 +138,7 @@ else
   echo "[mzsh] WARNING: Neovim config not found at $NVIM_CONFIG_SRC"
 fi
 
-# Disable conflicting macOS Services keyboard shortcuts (⌘⇧A, ⌘⇧M)
+# Disable conflicting macOS keyboard shortcuts and rebind window switching to ⌥Tab
 "$REPO_DIR/bin/mzsh-disable-macos-shortcuts" || record_failure "disable macOS shortcuts"
 
 # Use F1, F2, etc. as standard function keys (instead of media keys)

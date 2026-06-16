@@ -16,6 +16,10 @@ set -euo pipefail
 # window") are disabled to free them up for Raycast. They are symbolic hotkeys
 # 64 and 65 in ~/Library/Preferences/com.apple.symbolichotkeys.plist.
 #
+# Window switching: "Move focus to next window" (symbolic hotkey 27, default
+# ⌘`) is rebound to ⌥Tab, so ⌥Tab cycles through the windows of the
+# frontmost application.
+#
 # Safe to re-run; idempotent.
 
 if [ "$(uname)" != "Darwin" ]; then
@@ -66,6 +70,25 @@ disable_symbolic_hotkey() {
 echo "[mzsh] Disabling Spotlight hotkeys (use Raycast instead)"
 disable_symbolic_hotkey 64 1048576   # ⌘Space - Show Spotlight search
 disable_symbolic_hotkey 65 1572864   # ⌥⌘Space - Show Finder search window
+
+# Rebind "Move focus to next window" (symbolic hotkey 27, default ⌘`) to ⌥Tab.
+# Parameters: 65535 = no ASCII character, 48 = Tab key code, 524288 = ⌥ mask.
+echo "[mzsh] Rebinding 'Move focus to next window' to ⌥Tab"
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 27 "
+  <dict>
+    <key>enabled</key><true/>
+    <key>value</key>
+    <dict>
+      <key>type</key><string>standard</string>
+      <key>parameters</key>
+      <array>
+        <integer>65535</integer>
+        <integer>48</integer>
+        <integer>524288</integer>
+      </array>
+    </dict>
+  </dict>
+"
 
 # Make the symbolic hotkey changes take effect without logout
 if [ -x /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings ]; then

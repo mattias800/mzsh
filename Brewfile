@@ -2,12 +2,20 @@
 # Manage taps, formulae, and casks here.
 
 # Taps
+# Homebrew 6.0+ requires third-party taps to be explicitly trusted before it
+# will evaluate their Ruby code. `trusted: true` grants that trust at bundle
+# time so `brew bundle` runs non-interactively on fresh machines.
+# See: https://docs.brew.sh/Tap-Trust
+#
 # Support multiple .NET SDK versions installed side-by-side
 # See: https://github.com/isen-ng/homebrew-dotnet-sdk-versions
-tap "isen-ng/dotnet-sdk-versions"
+tap "isen-ng/dotnet-sdk-versions", trusted: true
 
 # Bun (official tap for compatibility across Homebrew versions)
-tap "oven-sh/bun"
+tap "oven-sh/bun", trusted: true
+
+# Rendered markdown Quick Look plugin (used by the flux-markdown cask below)
+tap "xykong/tap", trusted: true
 
 # Formulae
 brew "git"
@@ -67,7 +75,7 @@ cask "linearmouse"                        # customize mouse behavior - disable a
 # Quick Look plugins
 cask "quicklook-video"
 cask "syntax-highlight"          # syntax highlighting for source code and text files
-cask "xykong/tap/flux-markdown"  # rendered markdown Quick Look (auto-taps xykong/tap)
+cask "xykong/tap/flux-markdown"  # rendered markdown Quick Look (tap trusted above)
 cask "webpquicklook"
 cask "suspicious-package"
 cask "quicklook-csv"
